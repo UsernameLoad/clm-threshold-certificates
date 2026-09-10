@@ -1,0 +1,448 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs,longtable,array}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdfauthor={Khalid Ahmed},pdftitle={Certified two-sided bounds for the blowup/decay threshold of the dissipative Constantin-Lax-Majda equation across the fractional-dissipation family},pdfsubject={},pdfkeywords={}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Sone}{S^1}
+\newcommand{\nrm}[1]{\lVert #1 \rVert}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\Bfun}{\mathrm{B}}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Real}{Re}
+\newcommand{\pk}{\mathrm{pk}}
+
+\title{Certified two-sided bounds for the blowup/decay threshold of the dissipative Constantin--Lax--Majda equation across the fractional-dissipation family}
+\author{Khalid Ahmed\\[2pt]
+\small Independent Researcher\\
+\small \texttt{k@shipleed.com}\\
+\small ORCID iD: \href{https://orcid.org/0009-0005-3291-7993}{0009-0005-3291-7993}}
+\date{9 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the dissipative Constantin--Lax--Majda equation on the circle with dissipation $\nu(-\partial_x^2)^{\sigma/2}$ and canonical datum $\cos x$, the $\nu$-comparison on the positive analytic-signal hierarchy makes the set of viscosities with finite-time blowup an initial segment of the $\nu$-axis and the set with global decay a final segment; their endpoints $\nu_b(\sigma)\le\nu_d(\sigma)$ coincide at the two exactly solvable members and are not proved to coincide elsewhere (a bounded mode sum decays, Lemma~\ref{lem:bounded}; an unbounded global one is not excluded). Writing $\nu_*(\sigma)$ for this pair, we prove certified, computer-assisted two-sided bounds --- decay certificates by an excursion-tracking enclosure march with a certified tail block and landing, and blowup certificates by a $\sigma$-generic dyadic block-ladder minorant --- which, combined with a coefficient-comparison lemma on the hierarchy (proved here; it contains the $\nu$-comparison and Sakajo's $\alpha$- and data-monotonicity as its three corollaries) and the two exactly solvable members ($\sigma=0$, Ambrose--Lushnikov--Siegel--Silantyev; $\sigma=1$, Sakajo), pinch $\nu_*(\sigma)$ two-sidedly on every interior segment of $(0,2]$ at width ratio $\le1.603$, with certified brackets at $\sigma\in\{0.25,0.5,0.625,0.75,0.875,1.25,1.5,1.75,2\}$ of width ratios $1.0750$, $1.0126$, $1.0741$, $1.0417$, $1.1000$, $1.0538$, $1.0753$, $1.0909$, $1.1576$, and the exact value $\nu_*(1)=1/(2e)$: ten pinch points in all. The measured threshold curve and the family's derived near-threshold laws --- order selection $s=\sigma$, amplitude $2\nu\Gamma(2\sigma)/\Gamma(\sigma)$, rate coefficient $\kappa(\sigma)=1/\sigma-\Gamma(\sigma)^2/(2\Gamma(2\sigma))$, and the $m^0$-row bottom-slope identity $\dot D|_{\pk}=e\,[A\,\Bfun(\sigma,1-\sigma)-\nu]$ with its derived sign flip through the corner, confirmed two-sidedly --- are reported alongside, together with the finite-truncation verdict-flip calibration that governs what the numerics can and cannot certify.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+\subsection{The model and the hierarchy}
+On $\Sone=\R/2\pi\mathbb{Z}$ consider the dissipative Constantin--Lax--Majda equation
+\begin{equation}\label{eq:pde}
+\omega_t=(H\omega)\,\omega-\nu(-\partial_x^2)^{\sigma/2}\omega,\qquad \omega(\cdot,0)=\cos x,\qquad \nu>0,\ \sigma\ge0,
+\end{equation}
+with $H$ the periodic Hilbert transform ($\hat H_k=-i\sgn k$), so that $u_x=H\omega$ for the velocity $u$ with $\hat u_k=-\hat\omega_k/\abs{k}$. This is the $a=0$ member of the generalized Constantin--Lax--Majda family \cite{OSW08} with a fractional dissipation of order $\sigma$, the family studied by Sakajo \cite{Sak03a,Sak03b,Sak03c} and by Ambrose, Lushnikov, Siegel and Silantyev \cite{ALSS24}; the inviscid equation is the classical model of Constantin, Lax and Majda \cite{CLM85}, which blows up at $T=2$ from this datum. For the canonical datum the positive-frequency Fourier modes, written in the gauge of Proposition~\ref{prop:reduction} as $q_m\ge0$, obey the lower-triangular positive hierarchy
+\begin{equation}\label{eq:hier}
+q_m'=-\nu m^\sigma q_m+\tfrac12\sum_{j=1}^{m-1}q_jq_{m-j},\qquad q_1(t)=e^{-\nu t},\qquad q_m(0)=0\ (m\ge2),
+\end{equation}
+in which mode $m$ is forced only by modes below it. Three consequences of the triangularity organize everything that follows: truncation is exact (modes $1..M$ of the truncated system are the true modes), every enclosure problem solves by forward substitution, and the positivity of every coupling coefficient yields a comparison calculus (Section~\ref{sec:comparison}).
+
+\subsection{The object}
+The $\nu$-comparison (Corollary~\ref{cor:comparisons}(i)) makes the set $B(\sigma)$ of viscosities at which the mode sum blows up in finite time an initial segment of the $\nu$-axis and the set $D(\sigma)$ at which it stays bounded --- and hence, for $\sigma>0$, decays --- a final segment. Their endpoints $\nu_b(\sigma)\le\nu_d(\sigma)$ (Definition~\ref{def:pair}) coincide at $\sigma=0$ and at $\sigma=1$, where the members are exactly solvable; elsewhere their coincidence is not proved here (Section~\ref{sec:open}). We write $\nu_*(\sigma)$ for the pair; every bound below holds for both endpoints, and a bracket of $\nu_*(\sigma)$ is a bracket of both.
+
+\subsection{Prior explicit constants}
+The periodic dichotomy with explicit constants on both sides is due to Sakajo. On the blowup side, for data with non-negative sine coefficients, dissipation order $\alpha$ and $0<\nu\le\tfrac12e^{-3\alpha-1}$ the $L^2$ norm diverges in finite time for $\alpha>1$ \cite[Theorem~5]{Sak03b}, and for $\alpha\le1$ the constant is $1/(2e)$ \cite[Theorems~4 and~9]{Sak03b}; on the global side, for $\alpha\ge1$ and $\nu>\tfrac12\nrm{\omega_0}_{H^\alpha}$ the solution is global \cite[Theorem~14, as stated in the author's survey]{Sak03c}, an $O(1)$ constant for unit data that comes from the all-modes majorant of his Lemma~12. At $\sigma=0$ the equation is exactly solvable and $\nu_*(0)=\tfrac12$ \cite{ALSS24}, who also prove periodic small-data global existence for $\sigma\ge1$; at $\sigma=1$ the canonical solution is Sakajo's closed form \cite[Lemma~3]{Sak03b}, with the sharp threshold $\nu_*(1)=1/(2e)$. Sakajo also proves monotone comparisons in the data and in the dissipation order \cite[Proposition~2]{Sak03b}, \cite[Proposition~1]{Sak03c}.
+
+\subsection{What is new}
+Three qualified statements. The brackets of Section~\ref{sec:staircase} are the first \emph{sharp} explicit two-sided brackets of the threshold (Sakajo's 2003 pair is explicit on both sides, so ours are not the first explicit ones); they are the first obtained by certified computation; and the blowup certificates at $0<\sigma<1$ are the first certified blowup statements in the supercritical range. The staircase of Figure~\ref{fig:staircase} is, to our knowledge, the first two-sided description of the threshold as an object in the $(\sigma,\nu)$ plane. We make no unqualified claim of priority anywhere.
+
+\subsection{Organization}
+Section~\ref{sec:comparison} sets up the hierarchy, the coefficient-comparison lemma with its three corollaries, the lemma that a bounded mode sum decays, the threshold pair and the two exact members. Section~\ref{sec:decay} describes the decay certificates (an enclosure march through the near-threshold excursion with a certified tail block and a certified landing) and states the forty certified decay theorems of Table~\ref{tab:decay}. Section~\ref{sec:blowup} derives the $\sigma$-generic dyadic block-ladder lemma and states the thirteen certified blowup theorems of Table~\ref{tab:blowup}. Section~\ref{sec:staircase} assembles the staircase. Section~\ref{sec:laws} reports the measured threshold curve and the derived near-threshold laws with their confirmations, and the exact finite-truncation calibration. Section~\ref{sec:related} places the work in the literature and discloses what was and was not read; Section~\ref{sec:open} states the limits and the open questions. Appendix~\ref{app:A} proves the two lemmas of Section~\ref{sec:comparison}, Appendix~\ref{app:B} the reduction, Appendix~\ref{app:C} describes the validated integrator and its floating-point rigor model, and Appendix~\ref{app:D} the certificate records.
+
+\section{The hierarchy and the comparison calculus}\label{sec:comparison}
+
+\begin{proposition}[reduction, exact truncation, breakdown criterion]\label{prop:reduction}
+Let $\sigma\ge0$ and let $\omega$ be a smooth real mean-zero solution of \eqref{eq:pde} on $[0,T]$. Writing its positive-frequency modes as $w_m=\tfrac{i}{2}(-i)^mq_m$, the $q_m$ satisfy \eqref{eq:hier} and $q_m\ge0$. Conversely, the $q_m$ are defined for all $t\ge0$ by \eqref{eq:hier} independently of the PDE (each is an iterated integral of lower modes), and
+\begin{equation}\label{eq:hsbound}
+\sum_mq_m(t)\le C_s\nrm{\omega(\cdot,t)}_{H^s}\qquad(s>\tfrac12),
+\end{equation}
+so if $\sum_mq_m(\bar t)=\infty$ for some $\bar t$, no smooth solution exists on $[0,\bar t]$. If instead $\sum_mq_m\le B$ on $[0,T)$, the smooth solution continues past $T$.
+\end{proposition}
+The proof is in Appendix~\ref{app:B}; the first two statements are the $\sigma$-generic form of the reduction of the classical model \cite{CLM85} and of Sakajo's spectral formulation \cite[\S2]{Sak03b}, and the continuation statement is the standard tame estimate, since the mode sum bounds both $\nrm{\omega}_\infty$ and $\nrm{H\omega}_\infty$.
+
+\begin{lemma}[coefficient comparison on the positive triangular hierarchy]\label{lem:comparison}
+Let $(\lambda_m)_{m\ge1}$, $(\lambda'_m)_{m\ge1}$ be real sequences with $\lambda_m\le\lambda'_m$ for every $m$, and let $(a_m)$, $(a'_m)$ satisfy $a_m\ge a'_m\ge0$ for every $m$. Let $q_m$ and $q'_m$ solve
+\begin{equation}\label{eq:A1}
+q_m'(t)=-\lambda_mq_m(t)+\tfrac12\sum_{j=1}^{m-1}q_j(t)q_{m-j}(t),\qquad q_m(0)=a_m,
+\end{equation}
+and the same system with $(\lambda',a')$. Then $q_m(t)\ge q'_m(t)\ge0$ for every $m\ge1$ and $t\ge0$, mode by mode; each $q_m$ is globally defined whether or not $\sum_mq_m$ converges.
+\end{lemma}
+The proof (Appendix~\ref{app:A}) is an induction through the Duhamel form. Its transport content is the following: a bound, or the decay to zero, of the mode sum of $q$ passes to $q'$; the divergence of the mode sum of $q'$ at a time passes to $q$; the unboundedness of $\sum_mq'_m$ on a finite interval passes to $q$.
+
+\begin{corollary}[the three comparisons]\label{cor:comparisons}
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+\item ($\nu$-comparison; $\lambda_m=\nu m^\sigma\le\nu'm^\sigma$, equal data.) If $\nu'\ge\nu$ then $q^{(\nu')}\le q^{(\nu)}$ mode by mode. Hence the finite-time-blowup set is a down-set and the global-decay set an up-set of $\nu$.
+\item ($\alpha$-comparison; $\lambda_m=\nu m^{\sigma_1}\le\nu m^{\sigma_2}$ for $m\ge1$ and $\sigma_1\le\sigma_2$, equal data.) If $\sigma_1\le\sigma_2$ then $q^{(\sigma_1)}\ge q^{(\sigma_2)}$: decay transports up in $\sigma$, blowup down. The statement is Sakajo's \cite[Proposition~1]{Sak03c}, cited for priority; the proof given here is the induction of his \cite[Proposition~2]{Sak03b} with one added kernel inequality (Appendix~\ref{app:A}, Remark~\ref{rem:sakajo}).
+\item (Data comparison; $\lambda=\lambda'$, $a_m\ge a'_m$.) Larger non-negative data give larger modes; this is Sakajo's \cite[Proposition~2]{Sak03b}, with its printed induction.
+\end{enumerate}
+\end{corollary}
+
+\begin{lemma}[boundedness implies decay]\label{lem:bounded}
+Let $\sigma>0$, $\nu>0$, let $(a_m)$ be non-negative with $\sum_ma_m<\infty$, and let $(q_m)$ solve \eqref{eq:A1} with $\lambda_m=\nu m^\sigma$. Write $S(t):=\sum_mq_m(t)\in[0,\infty]$ and $T_M(t):=\sum_{m>M}q_m(t)$. If $B:=\sup_{t\ge0}S(t)<\infty$, then for every $M\ge1$ and $t\ge0$
+\begin{equation}\label{eq:tail}
+T_M(t)\le\sum_{m>M}a_m+\frac{B^2}{\nu(M+1)^\sigma},
+\end{equation}
+and $S(t)\to0$ as $t\to\infty$. The hypothesis $\sigma>0$ cannot be dropped: at $\sigma=0$, $\nu=\tfrac12$ the canonical member has $\sum_mq_m\equiv1$ (Remark~\ref{rem:sigma0}).
+\end{lemma}
+
+\begin{definition}[the threshold pair]\label{def:pair}
+Fix $\sigma>0$ and the canonical data, and write $S^\nu(t):=\sum_{m\ge1}q_m^{(\sigma,\nu)}(t)\in(0,\infty]$. Let
+\[
+B(\sigma):=\{\nu>0:\ \sup_{0\le t\le T}S^\nu(t)=\infty\text{ for some finite }T\},\qquad D(\sigma):=\{\nu>0:\ \sup_{t\ge0}S^\nu(t)<\infty\}.
+\]
+$B(\sigma)$ is finite-time blowup of the mode sum --- the hierarchy statement every certificate of Section~\ref{sec:blowup} prints, and the loss of the smooth PDE solution by Proposition~\ref{prop:reduction}; $D(\sigma)$ is a bounded mode sum --- by Lemma~\ref{lem:bounded} a decaying one, and exactly what the landing of Section~\ref{sec:decay} certifies. By Corollary~\ref{cor:comparisons}(i), $B(\sigma)$ is a down-set and $D(\sigma)$ an up-set, so
+\[
+\nu_b(\sigma):=\sup B(\sigma)\ \le\ \nu_d(\sigma):=\inf D(\sigma).
+\]
+Both sets are non-empty for every $\sigma>0$: $D(\sigma)\ni\nu$ for every $\nu\ge\tfrac12$ (the $\sigma=0$ member is bounded there and majorises every $\sigma\ge0$ by Corollary~\ref{cor:comparisons}(ii)); $B(\sigma)\ni\nu$ for $0<\nu\le1/(2e)$ when $\sigma\le1$ (the $\sigma=1$ member blows up there, Proposition~\ref{prop:exact}, and minorises every $\sigma\le1$) and for $0<\nu\le\tfrac12e^{-3\sigma-1}$ when $\sigma>1$ \cite[Theorem~5]{Sak03b}, whose proof bounds the hierarchy from below. Hence $0<\nu_b(\sigma)\le\nu_d(\sigma)\le\tfrac12$. A member with $\nu_b<\nu<\nu_d$, if any, is global with a mode sum unbounded as $t\to\infty$. Throughout, $\nu_*(\sigma)$ denotes the pair: ``blowup below $\nu_*$'' means below $\nu_b$, ``decay above $\nu_*$'' means above $\nu_d$, and a bracket of $\nu_*(\sigma)$ is a bracket of both endpoints.
+\end{definition}
+
+\begin{corollary}[quadrant calculus]\label{cor:quadrant}
+A certified decay at $(\sigma,\nu)$ gives $\nu_d(\sigma')\le\nu$ for every $\sigma'\ge\sigma$; a certified blowup at $(\sigma,\nu)$ gives $\nu_b(\sigma')\ge\nu$ for every $\sigma'\le\sigma$. Both $\nu_b$ and $\nu_d$ are non-increasing in $\sigma$.
+\end{corollary}
+
+\begin{remark}[data cone]\label{rem:cone}
+By Corollary~\ref{cor:comparisons}(iii), every blowup certificate of Section~\ref{sec:blowup} extends verbatim to all initial data whose hierarchy coefficients dominate the canonical ones componentwise ($a_m\ge\delta_{m,1}$). The decay-side analogue is vacuous for canonical data beyond the exact amplitude scaling $\omega\mapsto A\omega(x,At)$, $\nu\mapsto A\nu$. The certificates themselves state the canonical case only; the extension lives in this remark.
+\end{remark}
+
+\begin{proposition}[the two exact members and their transports]\label{prop:exact}
+\begin{enumerate}[label=(\alph*),leftmargin=2.2em]
+\item $\sigma=0$. With $u:=e^{-\nu t}$ the hierarchy has the closed form $\sum_mq_m=2\nu u/(2\nu-1+u)$ (the generating function of the Riccati equation, Remark~\ref{rem:sigma0}; the pole families of \cite[\S5.4, \S6]{ALSS24} give the same threshold behaviour for the equation). Hence $\nu_b(0)=\nu_d(0)=\tfrac12$, the threshold member itself is global and bounded with $\sum_mq_m\equiv1$, and for $\nu<\tfrac12$ the mode sum diverges at $T_0(\nu)=-\ln(1-2\nu)/\nu$. The decay half transports to the ceiling $\nu_d(\sigma)\le\tfrac12$ for all $\sigma\ge0$, and the blowup half gives the free corollary $T_*(\sigma,\nu)\ge T_0(\nu)$ for every $\sigma\ge0$ and $\nu<\tfrac12$, a consistency anchor for every blowup certificate.
+\item $\sigma=1$. The canonical member is Sakajo's closed form \cite[Lemma~3]{Sak03b}, $q_m=(t/2)^{m-1}e^{-m\nu t}$, a geometric sum with ratio $r(t)=(t/2)e^{-\nu t}$ and $\max_tr=1/(2e\nu)$. Hence $\nu_b(1)=\nu_d(1)=1/(2e)$, with the threshold member itself blowing up (Remark~\ref{rem:exact}). The decay half transports to the ceiling $\nu_d(\sigma)\le1/(2e)$ for all $\sigma\ge1$; the blowup half to the floor $\nu_b(\sigma)\ge1/(2e)$ for all $\sigma\le1$, which is the constant of \cite[Theorem~9]{Sak03b}. Sakajo's own global-existence theorem for $\alpha\ge1$ \cite[Theorem~14]{Sak03c} follows the same pattern with the all-modes majorant of his Lemma~12 in place of the exact member, which is why its constant is $O(1)$ rather than the sharp $1/(2e)$.
+\end{enumerate}
+\end{proposition}
+
+\section{Certified decay: the excursion-tracking march}\label{sec:decay}
+
+\subsection{Why an envelope cannot do it}
+Near the threshold the true solution excurses: the mode sum rises to a peak $\Sigma_{\pk}$ that diverges as $\nu\downarrow\nu_*$ (Section~\ref{sec:laws}; $\Sigma_{\pk}\approx800$ at $\sigma=2$, $\nu=0.052$) before it decays. Any pointwise-in-time envelope must admit that transient, and a large envelope feeds the quadratic term that the linear blocks of a static barrier must dominate; static-barrier constructions on this hierarchy stall well above the threshold. The certificates of this section replace ``an envelope for all $t$'' by the composition of (i) a certified enclosure march of the true solution from $t=0$ through the excursion, carrying a certified scalar bound on the tail beyond the marched modes as a proof component, and (ii) a certified landing in a static absorbing set from which cooperative comparison finishes.
+
+\subsection{The march}
+Modes $1..M$ are marched by a Lawson--Taylor-model integrator (Appendix~\ref{app:C}): on each dyadic step the stiff linear part $e^{-\nu m^\sigma h}$ is propagated by certified positive kernels, the nonlinear Taylor levels are scale-normalized, and the remainder bound is solved by one forward pass, so that the enclosure widths remain small through the excursion (Table~\ref{tab:decay} prints the largest live relative width of every march; all are below $1.5\times10^{-5}$). By exact truncation the marched modes are the true modes. The tail is carried by the following lemma.
+
+\begin{lemma}[tail carriage]\label{lem:tail}
+Let $M\ge1$ and, on a step $[t,t+h]$, let $S_m\ge\sup_{[t,t+h]}q_m$ for $m\le M$, $P\ge\sum_{m\le M}S_m$ and $R\ge\sum_{j+l>M;\ j,l\le M}S_jS_l$. Then $Y:=\sum_{m>M}q_m$ satisfies on the step
+\[
+Y'\le-\nu(M+1)^\sigma Y+PY+\tfrac12Y^2+\tfrac12R,
+\]
+and if $H>0$ satisfies $(\nu(M+1)^\sigma-P-H/2)H\ge R/2$ and $Y(t)\le H$, then $Y\le H$ on the step and
+\[
+Y(t+h)\le\frac{Y(t)}{1+a_2h}+\frac{R}{2}h,\qquad a_2:=\nu(M+1)^\sigma-P-\frac H2\ge0.
+\]
+\end{lemma}
+\begin{proof}
+Sum \eqref{eq:hier} over $m>M$ (the sums are finite for every truncation and pass to the limit monotonically, as in Appendix~\ref{app:B}). The dissipation of every tail mode is at least $\nu(M+1)^\sigma$. In the convolution, ordered pairs with both factors $\le M$ contribute at most $R/2$; pairs with exactly one factor above $M$ contribute at most $PY$; pairs with both above $M$ at most $Y^2/2$. If $Y(t)\le H$, the right-hand side is negative wherever $Y=H$, so $[0,H]$ is invariant on the step; on it $Y'\le-a_2Y+R/2$, and integrating the linear bound with $e^{-x}\le1/(1+x)$ gives the step bound.
+\end{proof}
+The march evaluates $S_m$, $P$ and $R$ from the Taylor levels and remainders of the enclosure, verifies the hull condition in ball arithmetic at every step, and aborts with a certified failure if it cannot be met; the tail block's peak $\bar Y_{\max}$ is printed in Table~\ref{tab:decay}.
+
+\subsection{The landing}
+\begin{lemma}[landing]\label{lem:landing}
+Let $t_l$ be a marched time and $m_S\ge1$ a split. Suppose (i) $\bar q_m\ge q_m(t_l)$ for $m\le m_S$; (ii) the triangular chain $\bar P_1=\bar q_1$, $\bar P_m=\bar q_m+\frac{1}{2\nu m^\sigma}\sum_{j<m}\bar P_j\bar P_{m-j}$ gives $\bar P:=\sum_{m\le m_S}\bar P_m<\lambda_S:=\nu(m_S+1)^\sigma$; (iii) $\bar R:=\sum_{j+l>m_S;\ j,l\le m_S}\bar P_j\bar P_l$; and (iv) some $H$ satisfies $Y_{\rm tot}(t_l):=\sum_{m>m_S}q_m(t_l)<H$ and $(\lambda_S-\bar P-H/2)H>\bar R/2$. Then $\sup_{t\ge t_l}\sum_mq_m(t)\le\bar P+H<\infty$, and the mode sum tends to zero.
+\end{lemma}
+\begin{proof}
+Modes $\le m_S$ form a closed cooperative subsystem; since $q_1(t)=\bar q_1e^{-\nu(t-t_l)}$ exactly and each $q_m(t)\le\bar q_m+\frac12\int_{t_l}^te^{-\nu m^\sigma(t-s)}\sum_{j<m}q_jq_{m-j}\,ds$, induction gives $\sup_{t\ge t_l}q_m\le\bar P_m$. The tail $Y_{\rm tot}$ then obeys the Riccati inequality of Lemma~\ref{lem:tail} with the constants $(\lambda_S,\bar P,\bar R)$, so $[0,H]$ is invariant. Restarting the argument at later times, the chain's inputs $\bar q_m$ decrease (mode $1$ exactly, the others by the same induction), so $\bar P,\bar R\to0$ and with them $H$ can be taken to zero; hence the mode sum decays. Existence up to $t_l$ is the march (modes $\le M$ exact by triangularity) together with Lemma~\ref{lem:tail}.
+\end{proof}
+Each certificate verifies (ii)--(iv) in ball arithmetic at $t_l$ and accepts a landing only when the hull margin --- the factor by which the inequality in (iv) holds --- is at least $3$; the margins are printed in Table~\ref{tab:decay}. The march-plus-landing architecture needs no exponential-sum representation of the low modes, which is why it transfers unchanged from $\sigma=2$ to every $\sigma>0$: the dissipation enters only as the positive per-mode rate $\nu m^\sigma$.
+
+\subsection{The certified decay theorems}
+\begin{theorem}[certified decay]\label{thm:decay}
+For every row $(\sigma,\nu)$ of Table~\ref{tab:decay} the canonical hierarchy \eqref{eq:hier} has a bounded mode sum, hence (Lemma~\ref{lem:bounded}) decays to zero; the smooth solution of \eqref{eq:pde} from $\cos x$ is global and $\nrm{\omega(t)}_\infty\to0$; and, by Corollary~\ref{cor:quadrant}, $\nu_d(\sigma')\le\nu$ for every $\sigma'\ge\sigma$.
+\end{theorem}
+Each certificate record prints its own statement in this order: the hierarchy theorem, the PDE corollary, the $\nu$-ray (every $\nu'\ge\nu$ at the same $\sigma$), the decay quadrant $\{\sigma'\ge\sigma\}\times\{\nu'\ge\nu\}$, and the prior bound it beats (for $\sigma\ge1$, the ceiling $1/(2e)$ transported from the $\sigma=1$ member, beaten by a factor $2.55$ at the deepest $\sigma=1.75$ certificate; for $\sigma<1$, the ceiling $\tfrac12$). Forty-one records certify forty distinct theorems: the $\nu=31/500$ pair at $\sigma=2$ is one theorem at two discretizations, whose marched excursion peaks agree to $1.4\times10^{-11}$. The deepest certificates sit within $0.31\%$ ($\sigma=0.5$) to $4.0\%$ ($\sigma=1.5$, $M=256$) of the measured thresholds of Section~\ref{sec:laws}.
+
+\input{tables.tex}
+
+\section{Certified blowup: the \texorpdfstring{$\sigma$}{sigma}-generic dyadic block-ladder}\label{sec:blowup}
+
+Let $I_k:=\{2^k,\dots,2^{k+1}-1\}$, $S_k(t):=\sum_{m\in I_k}q_m(t)$, and $\Lambda_{k+1}:=\nu\,2^{\sigma(k+2)}$, the block-worst dissipation rate of block $k+1$.
+
+\begin{lemma}[minorant]\label{lem:minorant}
+For every $k\ge0$ and $t\ge t_0\ge0$,
+\[
+S_{k+1}(t)\ \ge\ \tfrac12\int_{t_0}^te^{-\Lambda_{k+1}(t-s)}S_k(s)^2\,ds.
+\]
+\end{lemma}
+\begin{proof}
+For $m\in I_{k+1}$ write $q_m$ in Duhamel form from $t_0$, drop the non-negative homogeneous term, and keep in the convolution only the ordered pairs $(j,l)\in I_k\times I_k$. Every such pair has $j+l\in[2^{k+1},2^{k+2}-2]\subset I_{k+1}$, and every ordered pair lands in exactly one $m\in I_{k+1}$; summing over $m\in I_{k+1}$ therefore collects the full square $S_k^2$. The only $\sigma$-dependent step is the kernel: for $m\in I_{k+1}$, $m<2^{k+2}$ and $x\mapsto x^\sigma$ is increasing for $\sigma>0$, so $\nu m^\sigma<\Lambda_{k+1}$ and $e^{-\nu m^\sigma(t-s)}\ge e^{-\Lambda_{k+1}(t-s)}$.
+\end{proof}
+
+\begin{lemma}[ladder]\label{lem:ladder}
+Fix $\sigma>0$, $\nu>0$ and $k_0\ge0$. Let $h_k:=1/\Lambda_{k+1}$ and
+\[
+H:=\sum_{k\ge k_0}h_k=\frac{2^{-\sigma(k_0+2)}}{\nu(1-2^{-\sigma})},\qquad A_*(k_0):=\frac{2\nu}{1-e^{-1}}\,2^{\sigma(k_0+3)}.
+\]
+If $S_{k_0}(s)\ge A$ for all $s\in[t_1,t_1+W]$ with $W\ge H$ and $A>A_*(k_0)$, then $\sum_mq_m(t)=\infty$ for every $t\ge\bar t:=t_1+H$; consequently no smooth solution of \eqref{eq:pde} exists beyond $\bar t$.
+\end{lemma}
+\begin{proof}
+Set $A_{k_0}:=A$, $A_{k+1}:=(1-e^{-1})A_k^2/(2\Lambda_{k+1})$ and $\tau_k:=t_1+\sum_{k_0\le j<k}h_j$. By induction $S_k(t)\ge A_k$ for $t\in[\tau_k,t_1+W]$: the step applies Lemma~\ref{lem:minorant} with $t_0=\tau_k$ over the window $[t-h_k,t]\subseteq[\tau_k,t_1+W]$, and $\int_{t-h_k}^te^{-\Lambda_{k+1}(t-s)}ds=(1-e^{-1})/\Lambda_{k+1}$ because $\Lambda_{k+1}h_k=1$. At $\bar t=t_1+H$ every $\tau_k\le\bar t$, so $S_k(\bar t)\ge A_k$ for every $k\ge k_0$ simultaneously. With $g:=2^\sigma$ and $G:=2\nu2^{2\sigma}/(1-e^{-1})$ the recursion reads $A_{k+1}=A_k^2/(Gg^k)$; it has the exact critical solution $A_k^{\rm crit}=Gg^{k+1}$, and deviations double: $\ln(A_k/A_k^{\rm crit})=2^{k-k_0}\ln(A_{k_0}/A_*(k_0))$ with $A_*(k_0)=Gg^{k_0+1}$. For $A>A_*(k_0)$, $A_k\to\infty$ doubly exponentially, so $\sum_mq_m(\bar t)\ge\sum_{k\ge k_0}A_k=\infty$; the mode sum stays infinite afterwards by Proposition~\ref{prop:reduction} and Corollary~\ref{cor:comparisons}, and the PDE statement follows from the breakdown criterion.
+\end{proof}
+At $\sigma=2$ the constants reduce verbatim to those of the earlier $\sigma=2$ certificates: $A_*(k_0)=(2\nu/(1-e^{-1}))4^{k_0+3}$ and $H=(4/3)/(\nu4^{k_0+2})$. Two things change below the corner, both honestly stated. The delay prefactor $1/(1-2^{-\sigma})$ grows as $\sigma$ falls ($1.333$ at $\sigma=2$, $3.414$ at $0.5$, $6.29$ at $0.25$, unbounded as $\sigma\to0$): the seed must hold for longer, in units of the block-worst e-folding, but the requirement is finite for every $\sigma>0$, so the lemma closes on the whole supercritical range. And the trigger $A_*(k_0)\propto2^{\sigma(k_0+3)}$ collapses as $\sigma$ falls, so the marches are short. Nothing else changes: the doubling inequality is index arithmetic and positivity, both blind to $\sigma$.
+
+\subsection*{The certificate obligations}
+Each blowup certificate verifies, in ball arithmetic, (B1) that the seed holds on the whole window and not only at step points --- between step points every mode is a supersolution of pure decay, so $S_{k_0}(t)\ge e^{-\nu(2^{k_0+1})^\sigma h}S_{k_0}(t_n)$ on a step of size $h$, and the certified window value is the minimum over the window's steps of this interior bound applied to the decay-only lower hull of the enclosure; (B2) that $A\ge2A_*(k_0)$ with $A_*$ an upper ball bound; (B3) that the achieved window (an exact dyadic difference of step boundaries) is at least $H$, with $H$ an upper ball bound; (B4) that $M\ge2^{k_0+1}-1$, so that all of $I_{k_0}$ is marched exactly. The window bound uses only the lower hull, so its soundness is independent of the upper machinery.
+
+\begin{theorem}[certified blowup]\label{thm:blowup}
+For every row $(\sigma,\nu)$ of Table~\ref{tab:blowup}, $\sum_mq_m(t)=\infty$ for all $t\ge\bar t$, where $\bar t$ is the printed window end; the smooth solution of \eqref{eq:pde} from $\cos x$ admits no continuation beyond $\bar t$; and, by Corollary~\ref{cor:quadrant}, $\nu_b(\sigma')\ge\nu$ for every $\sigma'\le\sigma$.
+\end{theorem}
+Each record prints the hierarchy theorem, the PDE corollary, the $\nu$-ray, the blowup quadrant $\{\sigma'\le\sigma\}\times\{\nu'\le\nu\}$, and the prior bound it beats (for $\sigma<1$, the floor $1/(2e)=0.18394$ of \cite[Theorem~9]{Sak03b}, beaten by $117\%$ at $\sigma=0.25$; for $\sigma>1$, the floor $\tfrac12e^{-3\sigma-1}$ of \cite[Theorem~5]{Sak03b}). Every blowup time is consistent with the free lower bound $T_*(\sigma,\nu)\ge T_0(\nu)$ of Proposition~\ref{prop:exact}.
+
+\section{The staircase}\label{sec:staircase}
+
+\begin{theorem}[the certified staircase]\label{thm:staircase}
+The threshold pair of Definition~\ref{def:pair} satisfies the bounds of Table~\ref{tab:staircase} on every segment of the $\sigma$-axis listed there.
+\end{theorem}
+
+\begin{table}[htbp]
+\centering\small
+\caption{The certified floor and ceiling of $\nu_*(\sigma)$ (Theorem~\ref{thm:staircase}). Floors are transported down in $\sigma$ from the blowup certificates of Table~\ref{tab:blowup}, ceilings up in $\sigma$ from the decay certificates of Table~\ref{tab:decay}, by Corollary~\ref{cor:quadrant}; the two exact members supply the ceilings on $(0,0.25)$ and on $[1,1.25)$ and the floor on $(0.875,1)$.}\label{tab:staircase}
+\begin{tabular}{@{}llll@{}}
+\toprule
+segment & $\nu_b(\sigma)\ge$ & segment & $\nu_d(\sigma)\le$\\
+\midrule
+$(0,0.25]$ & $0.40$ & $(0,0.25)$ & $1/2$ (the $\sigma=0$ member)\\
+$(0.25,0.5]$ & $0.3175$ & $[0.25,0.35)$ & $0.43$\\
+$(0.5,0.625]$ & $0.27$ & $[0.35,0.5)$ & $0.385$\\
+$(0.625,0.75]$ & $0.24$ & $[0.5,0.625)$ & $0.3215$\\
+$(0.75,0.875]$ & $0.20$ & $[0.625,0.75)$ & $0.29$\\
+$(0.875,1)$ & $0.18394$ (the $\sigma=1$ member) & $[0.75,0.875)$ & $0.25$\\
+$\sigma=1$ & $1/(2e)$ exact & $[0.875,1)$ & $0.22$\\
+$(1,1.25]$ & $0.13$ & $[1,1.25)$ & $1/(2e)$ (the $\sigma=1$ member)\\
+$(1.25,1.5]$ & $0.093$ & $[1.25,1.5)$ & $0.137$\\
+$(1.5,1.75]$ & $0.066$ & $[1.5,1.75)$ & $0.100$\\
+$(1.75,2]$ & $46/1024=0.044921875$ & $[1.75,2)$ & $0.072$\\
+$[2,\infty)$ & $\tfrac12e^{-3\sigma-1}$ \cite[Theorem~5]{Sak03b} & $[2,\infty)$ & $0.052$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{corollary}[ten pinch points]\label{cor:pinch}
+On every interior segment of $(0,2]$ the ceiling exceeds the floor by a factor at most $1.603$ (the maximum, $0.072/0.044921875=1.6028$, is attained on $(1.75,2)$). At the nine values $\sigma=0.25$, $0.5$, $0.625$, $0.75$, $0.875$, $1.25$, $1.5$, $1.75$, $2$ a blowup and a decay certificate meet at the same $\sigma$, giving the brackets $[0.40,0.43]$, $[0.3175,0.3215]$, $[0.27,0.29]$, $[0.24,0.25]$, $[0.20,0.22]$, $[0.13,0.137]$, $[0.093,0.100]$, $[0.066,0.072]$, $[0.044921875,0.052]$, of width ratios $1.0750$, $1.0126$, $1.0741$, $1.0417$, $1.1000$, $1.0538$, $1.0753$, $1.0909$, $1.1576$; with the exact value at $\sigma=1$ these are ten pinch points.
+\end{corollary}
+
+\paragraph{What the brackets bound.} Every bracket $[\nu_{\rm blow},\nu_{\rm dec}]$ encloses the closed interval $[\nu_b(\sigma),\nu_d(\sigma)]$: a blowup certificate at $\nu$ gives $\nu_b\ge\nu$ and a decay certificate at $\nu$ gives $\nu_d\le\nu$. Hence any interval of global non-decaying members at that $\sigma$, if one exists, is no wider than the bracket --- at most $0.004$ at $\sigma=0.5$, the sharpest.
+
+\paragraph{Scope.} The $[2,\infty)$ tail is stated one-sidedly: our ceiling $0.052$ against Sakajo's floor. The deep-subcritical region is not a target of this paper (Section~\ref{sec:open}). The ceiling on $(0,0.25)$ is the composition of the exact $\sigma=0$ member with Corollary~\ref{cor:comparisons}(ii), a theorem-grade bound that costs no computation; the segments of $(1,2)$ sit within $4$--$15\%$ of the irreducible width ratios $1.36$--$1.40$ that the measured curve of Section~\ref{sec:laws} imposes on a staircase with these pinch points.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig1.pdf}
+\caption{The certified staircase in the $(\sigma,\nu)$ plane (logarithmic $\nu$): the floor and the ceiling of Table~\ref{tab:staircase} as step functions with the ten pinch points, the measured curve $\nu_*(\sigma)$ of Section~\ref{sec:laws} threaded between them, the two exact members marked at $\sigma=0$ and $\sigma=1$, the transport directions of Corollary~\ref{cor:quadrant} shown at the $\sigma=1.5$ pair, and the one-sided region $\sigma\ge2$ hatched. The staircase is re-derived from the certificate records inside the figure generator and checked against the emitted tables before drawing.}\label{fig:staircase}
+\end{figure}
+
+\section{The measured threshold curve and the derived near-threshold laws}\label{sec:laws}
+
+Everything in this section is measured or derived at the level stated; nothing here is certified in the sense of Sections~\ref{sec:decay}--\ref{sec:blowup}, and every measured value carries the instrument floor of Section~\ref{sec:calibration}.
+
+\subsection{The measured curve}
+Two instruments locate the threshold without a certification bar: the slaving inversion of the excursion (the amplitude law of Section~\ref{sec:selection} inverted for $\nu_*$ on a sequence of clean decaying runs, whose inversions converge monotonically with depth) and the verdict bracket (the finest $\nu$-grid at which a fixed truncation flips between blowup and decay, read together with its calibration). Table~\ref{tab:map} lists the values. The interpolation of $\ln\nu_*$ through the five values first measured at $\sigma\in\{1,1.25,1.5,1.75,2\}$ predicted $\nu_*(1.375)=0.115241$ before that $\sigma$ was run, and the measurement returned $0.115241(2)$ --- a six-digit forward hit that makes the curve predictive rather than fitted. Below the corner a one-parameter chart $\nu_*(\sigma)=\tfrac12\exp(-\sigma+0.221097\,\sigma(1-\sigma))$ reproduces two forward measurements to $+0.07\%$ and $+0.13\%$; we report it as a chart, not a law. What the instruments read, in the language of Definition~\ref{def:pair}: the divergence law's pole is approached from the blowup side and the verdict bracket sees one flip at its resolution, so at each measured $\sigma$ an intermediate interval, if any, is narrower than the printed floor; the measured value is written $\nu_*(\sigma)$ for the pair.
+
+\begin{table}[htbp]
+\centering\small
+\caption{The measured threshold curve. Parenthesised digits are the instrument floors of Section~\ref{sec:calibration}; intervals are verdict brackets on the finest grid run.}\label{tab:map}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+$\sigma$ & $\nu_*(\sigma)$ & & $\sigma$ & $\nu_*(\sigma)$\\
+\midrule
+$0.10$ & $(0.46100,\,0.46125)$ & & $1$ & $1/(2e)$ exact\\
+$0.20$ & $(0.42375,\,0.423875)$ & & $1.25$ & $0.13510(2)$\\
+$0.35$ & $(0.37050,\,0.37075)$ & & $1.375$ & $0.115241(2)$\\
+$0.50$ & $(0.3200,\,0.3210)$ & & $1.5$ & $0.098066(4)$\\
+$0.625$ & $(0.2815,\,0.2820)$ & & $1.75$ & $0.07062(1)$\\
+$0.75$ & $(0.2458,\,0.2465)$ & & $2$ & $0.0505674(5)$\\
+$0.875$ & $(0.21325,\,0.213375)$ & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The front and the selection law}\label{sec:selection}
+Near the threshold the excursion's mode profile at its peak is a front $q_m\approx F(m)\,e^{-\delta(t)m}$ with $F(m)=A\,m^{s-1}(1+\dots)$: a singularity of the generating function $\sum_mq_me^{imx}$ at distance $\delta$ from the real axis, of order $s$. On the ansatz $q_m=Am^{s-1}e^{-\delta m}$ the convolution in \eqref{eq:hier} is, for large $m$, $\tfrac12A^2\Bfun(s,s)\,m^{2s-1}e^{-\delta m}$ and the dissipation is $\nu A\,m^{s+\sigma-1}e^{-\delta m}$; the quasi-steady front balance equates the two orders and the two coefficients, which forces
+\begin{equation}\label{eq:selection}
+s=\sigma,\qquad A=\frac{2\nu}{\Bfun(\sigma,\sigma)},\qquad \Sigma_{\pk}\,\delta^\sigma\to A\,\Gamma(\sigma)=\frac{2\nu\,\Gamma(2\sigma)}{\Gamma(\sigma)},
+\end{equation}
+the last relation from $\sum_mm^{\sigma-1}e^{-\delta m}\approx\Gamma(\sigma)/\delta^\sigma$. The dynamics selects the singularity order equal to the dissipation order. At the two integer anchors the law returns known objects: $\sigma=2$ gives the double pole with residue $12\nu$, the structure of Schochet's explicit solutions \cite{Sch86} as restated in \cite[\S5.1]{ALSS24}; $\sigma=1$ gives the simple pole with amplitude $2\nu$ of Sakajo's closed form, whose slaving constant at the threshold is $1/e=2\nu_*(1)$ exactly. The measurements: the fitted prefactor exponent $\sigma_{\rm pf}=s-1$ equals $\sigma-1$ to three decimals, with split-half agreement, at $\sigma=1$ ($0.000/0.000$), $1.1$ ($0.099$), $1.25$ ($0.250/0.250$), $1.375$ ($0.375/0.375$), $1.5$ ($0.500/0.500$), $1.75$ ($0.750/0.749$), $1.9$ ($0.900/0.897$) and $2$ ($0.999\to1.000$); the amplitude constant $\Sigma_{\pk}\delta^\sigma/\nu$ is measured at $2.934$ against the derived $2.9332$ at $\sigma=1.25$ ($0.03\%$), $4.5136$ against $4.51353$ at $\sigma=1.5$ (four digits, with monotone finite-depth convergence $4.583\to4.535\to4.516\to4.5136$), and $7.233$ against $7.2320$ at $\sigma=1.75$ ($0.01\%$); at $\sigma=2$ the residue $12\nu$ holds to four digits through the whole excursion. Each measurement is on runs whose spectral tails sit many orders inside the truncation.
+
+\subsection{The rate coefficient and the corner}\label{sec:rate}
+The next order of the same balance carries the time dependence. Writing the front as $q_m=(Am^{\sigma-1}+D)e^{-\delta m}$, with $D$ the simple-pole admixture, the $m^\sigma$ row of \eqref{eq:hier} reads $-\dot\delta A\,m^\sigma=A D\,\Bfun(\sigma,1)\,m^\sigma-\nu D\,m^\sigma$ (the cross term of the two slots on the left, the dissipation of the $D$ slot on the right), which with $A=2\nu/\Bfun(\sigma,\sigma)$ gives
+\begin{equation}\label{eq:kappa}
+\dot\delta=-\kappa(\sigma)\,D,\qquad \kappa(\sigma)=\frac1\sigma-\frac{\Bfun(\sigma,\sigma)}{2}=\frac1\sigma-\frac{\Gamma(\sigma)^2}{2\Gamma(2\sigma)}\qquad(1<\sigma\le2).
+\end{equation}
+At $\sigma=2$, $\kappa=\tfrac12-\tfrac1{12}=5/12$, the coefficient of the pole path of Schochet's solution as read from \cite[\S5.1]{ALSS24}; the formula supplies its one-line general-$\sigma$ derivation. The two-instrument measurement of $\kappa$ ($D$ from the fitted front at through-excursion snapshots, $\dot\delta$ from the tracked closest approach) gives $0.49123$, $0.47112$, $0.44336$, $0.41575$ against the derived $0.49099$, $0.47032$, $0.44435$, $0.41667$ at $\sigma=1.25$, $1.5$, $1.75$, $2$ (deviations $+0.05\%$, $+0.17\%$, $-0.22\%$, $-0.22\%$); a structurally different instrument, with $\dot\delta$ taken from the exact right-hand side instead of the track, gives $0.49183$, $0.44458$, $0.41498$ at $\sigma=1.25$, $1.75$, $2$ ($+0.17\%$, $+0.05\%$, $-0.40\%$); and at $\sigma=1.375$, a value never run before the prediction was registered, the derived $0.4816288$ met the measured $0.4812613$ at $-0.076\%$ with no fitted parameter. Below the corner the roles of the two slots exchange: the $m^1$ row pins $\dot\delta=-D/2$ with no $\sigma$-dependence, so the effective coefficient freezes at $\kappa_{\rm eff}(\sigma)=\kappa(\max(\sigma,1))=\tfrac12$ for $\sigma\le1$ --- measured $-\dot\delta/D=0.4896/0.4954$ (median/origin slope) at $\sigma=0.25$, where the naive continuation of \eqref{eq:kappa} would give $0.29185$, and $0.4456/0.4869$ at $\sigma=0.10$ against $0.14268$. Both regimes are one identity, $\dot\delta=-Q\,(1/\sigma-\nu/P)$ with $P$ the coefficient of the $m^{\sigma-1}$ slot and $Q$ the constant slot: above the corner the leading row pins $P=2\nu/\Bfun(\sigma,\sigma)$ and returns \eqref{eq:kappa}, below it the $m^1$ row pins $\dot\delta=-Q/2$ and returns $P=2\nu\sigma/(2-\sigma)$, and at $\sigma=1$ all three rows collide. The corner is a role exchange between the front's two slots, not a change of law.
+
+\subsection{The curvature map and its factorization}
+The closest-approach curvature $Y(\sigma):=\ddot\delta|_{\min}/\nu^2$ is independent of the distance to threshold and equals $1$ exactly at $\sigma=1$ (on Sakajo's closed form $\delta(t)=\nu t-\ln(t/2)$, so $\ddot\delta=1/t^2=\nu^2$ at the bottom $t=1/\nu$); measured, $Y=1.2456(1)$, $1.6339(2)$, $2.3334(9)$, $3.1081(1)$, $3.6119(1)$, $3.9654(9)$ at $\sigma=1.1$, $1.25$, $1.5$, $1.75$, $1.9$, $2$. Differentiating $\dot\delta=-\kappa D$ at the bottom gives $Y=\kappa(\sigma)\,k(\sigma)/\nu^2$ with $k:=\abs{dD/dt}$ at the bottom, an identity between a track observable and a mode-fit observable; with $k/\nu^2=3.3142$, $4.0969$, $4.9630$, $6.9843$, $9.4748$ measured independently at $\sigma=1.25$, $1.375$, $1.5$, $1.75$, $2$, the identity holds at $-0.41\%$, $+0.03\%$, $-0.15\%$, $-0.44\%$ ($\sigma=1.25$, $1.5$, $1.75$, $2$). The bottom-slope map $k(\sigma)$ has no local closed form, and the obstruction is derived: in the exact front reduction the order ladder closes at $m^{2\sigma-1}$ (fixing $A$) and at $m^\sigma$ (fixing $\kappa$), but the $m^0$ row reads
+\begin{equation}\label{eq:m0}
+\dot D|_{\pk}=e\,\big[A\,\Bfun(\sigma,1-\sigma)-\nu\big],
+\end{equation}
+with $e$ the coefficient of the $m^{-\sigma}$ slot, whose own row reaches down again; and $\Bfun(\sigma,1-\sigma)=\pi/\sin(\pi\sigma)$ diverges at both integer anchors. The value $k(1)/\nu^2=2$ is obtainable only because the $\sigma=1$ collision short-circuits the chain. The identity \eqref{eq:m0} predicts the sign of $e$: positive on $(1,2)$ and negative on $(0,1)$, degenerating at $\sigma=1$ (the collision) and $\sigma=2$ (the Beta pole). The measured $\hat e$ is $+0.031$, $+0.030$, $+0.010$ at $\sigma=1.25$, $1.5$, $1.75$ and $-0.047$ at $0.75$, the predicted signs; against the independently measured $k$ the identity holds at $\hat e/e_{\rm pred}=1.07$, $1.06$, $0.73$ above the corner, and below it a through-excursion series at $\sigma=0.75$ closes it with $k/\nu^2=0.904$, $e_{\rm qs}/\hat e=1.09$--$1.14$ and $\kappa_{\rm eff}(0.75)=\tfrac12$ confirmed at $1$--$3\%$. On two further banked vectors the identity reads $\hat e/e_{\rm pred}=1.054$ and $1.061$ at $\sigma=1.5$, and $1.083$ at $\sigma=1.375$; at $\sigma=1.9$, however, $\hat e=-4.26\cdot10^{-3}$ on two clean vectors at different depths, against the identity's positive prediction. The deviation $\hat e-e_{\rm pred}$ is smooth in $\sigma$: it crosses zero between $\sigma=1.5625$ ($+8.4\cdot10^{-4}$) and $\sigma=1.625$ ($-5.7\cdot10^{-4}$ and $-6.0\cdot10^{-4}$ on two vectors), near $\sigma_0\approx1.60$ and away from the $\sigma=1.5$ lattice collision, and it grows toward the $\sigma=2$ degeneracy, where $\Bfun(\sigma,1-\sigma)$ has its pole and $e_{\rm pred}\to0$. We state \eqref{eq:m0} as confirmed at factor-band grade with $\sigma$-structured residuals ($-27\%$ to $+14\%$, and the sign flip by $\sigma=1.9$). The row's next order is derived and verified: $\dot D=e[A\Bfun(\sigma,1-\sigma)-\nu]+De\,\zeta(\sigma)+DA\,\zeta(1-\sigma)-D^2/2+\dots$, with the $De\,\zeta(\sigma)$ constant checked against exact convolution sums; along the trajectory it accounts for most of the measured drift $d\hat e/dD$ at $\sigma=1.375$, $1.5$, $1.75$ (predicted $+0.207$, $+0.206$, $+0.119$ against measured $+0.194$, $+0.229$, $+0.143$) while over-correcting near the $\zeta$-pole at $\sigma=1$. An extensive programme of registered tests on the remaining residual --- the derived next orders of the slot tower as quasi-steady objects (whose in-row relaxation rates, $0.08$--$0.24$, are ten to fifty times slower than the excursion, so no quasi-steady closure can price them), their linear-response memory integrals (predicted deviation $+0.26$ against the measured $-3.8\cdot10^{-3}$ at $\sigma=1.75$, the wrong sign), the front's measured deviation content, and finally a truncation-order convergence test of the profile fit --- established that the residual is a truncation-order quantity of the profile-fit instrument, not measurable by profile fitting at any fixed order: at $\sigma=1.5$ the fit is identifiable at every order and the fitted coefficient reads $0.79$, $0.19$ and $1.84$ times the prediction at three successive orders, while at the $\sigma$ where the derived slot powers form a lattice of spacing $1/4$ or $1/8$ the fit loses identifiability altogether. No physics is claimed for the residual; the $m^0$-row closure beyond factor-band grade is left open (Section~\ref{sec:open}). Below the corner the identity decomposes the merged slot at $\sigma=\tfrac12$ (the amplitude deficit moves from $-21.5\%$ in a free fit to $+6.4\%$ of the law value once $e$ is constrained by the measured $\dot D$, with $\operatorname{sign}e<0$ confirmed), and its denominator crosses zero inside the physical amplitude range at $\sigma=\tfrac14$, so the identity is usable on roughly $\sigma\in(0.3,2)$ minus the anchors. The only sub-$0.75$ bottom rows measured are report-grade: $k(0.5)/\nu^2\approx0.28$ (stencil spread $28\%$) and $Y(0.5)\approx0.17$--$0.23$.
+
+\subsection{The finite-truncation calibration}\label{sec:calibration}
+A rank-$M$ spectral instrument near the threshold produces false excursions and flipped verdicts, and at $\sigma=0$ every such artefact is arithmetic, because the hierarchy has a closed form there: with $u=e^{-\nu t}$ and $r(t)=(1-u)/(2\nu)$ the partial sum the instrument measures is $\Sigma_M(t)=u(1-r^M)/(1-r)$.
+
+\begin{proposition}[the verdict-flip law at $\sigma=0$]\label{prop:flip}
+Write $\nu=\tfrac12(1-\eta)$, $c:=M\eta=M(1-2\nu)$ and $x:=Me^{-\nu t}$. Then at fixed $c$, as $M\to\infty$,
+\[
+\Sigma_M(t)\to\Phi(x;c)=\frac{x\,(e^{c-x}-1)}{c-x},
+\]
+regular at $x=c$. Consequently the false-excursion peak height $\Phi_{\max}(c)$ is $M$-independent at fixed $c$, the peak time moves like $\ln M$, and the apparent threshold at a blowup bar ${\rm bar}$ is
+\[
+\nu_{*,M}({\rm bar})=\tfrac12\Big[1-\frac{c({\rm bar})}{M}\Big]+O(M^{-2}),\qquad c({\rm bar})=w+2+\frac1w,\quad w=-W_{-1}(-e/{\rm bar}),
+\]
+with $W_{-1}$ the lower real branch of the Lambert function.
+\end{proposition}
+The reduction is the substitution of $c$ and $x$ into the closed form and the limit $M\to\infty$; the threshold formula is the condition $\Phi_{\max}(c)={\rm bar}$ solved at the peak $x_{\pk}$ with $c=x_{\pk}^2/(x_{\pk}-1)$. Verification: $\Phi_{\max}(8)=158.316728$ against the measured $159.223113$, $158.542593$, $158.373149$, $158.330830$ at $M=4096$, $16384$, $65536$, $262144$ (deviations $+0.5725\%$, $+0.1427\%$, $+0.0356\%$, $+0.0089\%$, ratios $4.01$, $4.00$, $4.00$ --- exact $1/M$ convergence); at two bars never used before the prediction, $c(10^6)=17.624495$ and $c(10^8)=22.487009$ against the measured $17.624356$ and $22.486779$ at $M=2^{20}$, with $1/M$ ratios of $4.00$ at every fourfold increase of $M$. The operational content is that $c$ grows only like $\ln{\rm bar}+2\ln\ln{\rm bar}$: raising the bar buys logarithms, raising $M$ buys linearly. Every measured bracket of Table~\ref{tab:map} carries the floor this calibration implies --- at most $0.2\%$ for the sub-unit brackets at $M\ge4096$, below their grid resolution --- and at $\sigma=0.5$ the bias is capped by a theorem rather than a model: the apparent threshold $\nu_{*,M}\in(0.3200,0.3210)$ at $M\le16384$ lies inside the certified $[0.3175,0.3215]$, so the total finite-$M$ error there is rigorously at most $1.2\%$ low and $0.5\%$ high. The general lesson of the calibration is that near-threshold truncation can flip verdicts, not only bias peaks: a fixed-$M$ decay verdict is bar-calibrated exactly as a fixed-bar blowup verdict is, and only the certificates of Sections~\ref{sec:decay}--\ref{sec:blowup} are free of both.
+
+\section{Attribution and related work}\label{sec:related}
+
+\paragraph{Sakajo.} Three items. (a) \cite{Sak03b}, read in full: Proposition~2 (data comparison) with its printed induction, Lemma~3 (the $\alpha=1$ single-mode closed form) with its proof, Theorems~4, 5 and 9 (the explicit blowup constants). (b) \cite{Sak03c}, the author's survey of (a) and (c), read in full: Propositions~1--2, Lemma~3, Lemma~12 (the all-modes majorant), Lemma~13 and Theorem~14 (global existence for $\alpha\ge1$ and $\nu>\tfrac12\nrm{\omega_0}_{H^\alpha}$) as stated there, with ``as for the detailed proof, please refer to the papers [5] and [6]''. (c) \cite{Sak03a}, not read (not on arXiv), cited at metadata level as the venue of the proofs of Proposition~1 and Theorem~14. The $\alpha$-comparison that underwrites the transport quadrants of every theorem here is Proposition~1 of (b) in statement and Lemma~\ref{lem:comparison} of this paper in proof.
+
+\paragraph{Ambrose--Lushnikov--Siegel--Silantyev and Schochet.} \cite{ALSS24} (the held text is the arXiv version): the $\sigma=0$ exact solution, the periodic global existence, the priors of their Table~1, and in their \S5.1 the restatement of Schochet's $\sigma=2$ solution with a corrected constant, verified numerically in their \S7.3.1. \cite{Sch86}, not read: the $\sigma=2$ pole structure is held only as that restatement (their (36)--(45); $K_\pm=24(3\pm\sqrt6)$ correcting the original's $12(6\pm\sqrt6)$), and everything this paper takes from ``Schochet'' --- the double-pole coefficient $B=-12\nu i$, the pole-path rate $\dot x_1=-(5/12)K_\pm\nu/(x_1-x_2)$ and hence the coefficient $5/12$, which comes from the path's $5/3$ and not from the corrected $K_\pm$ --- is read from it. \cite{SLSA25} give the periodic exact solutions at $a\in\{0,\tfrac12\}$ and $\sigma\in\{0,1\}$; \cite{Chen20} the singularity formation and global well-posedness theory of the family with dissipation.
+
+\paragraph{Disclosure.} Two journal primaries cited above were not read: no paywalled item was purchased or obtained through a library for this work. What this paper takes from them is pinned from held free texts: from Sakajo's own survey (b), Propositions~1 and~2, Lemma~3, Lemmas~12--13 and Theorem~14 as stated there (the constant $\tfrac12\nrm{\omega_0}_{H^\alpha}$ read from the printed page); from \cite{Sak03b}, the proofs of Proposition~2 and Lemma~3 and the blowup theorems; from \cite[\S5.1]{ALSS24}, Schochet's solution in corrected form. The proofs this paper has not seen are Sakajo's own proof of Proposition~1 (replaced here by Lemma~\ref{lem:comparison}, with his priority stated), his proof of the $H^\alpha$ estimate of Theorem~14 (used only as a cited $O(1)$ constant in Section~\ref{sec:intro}; the sharp $\sigma\ge1$ ceiling of Section~\ref{sec:staircase} rests on Lemma~3 and Lemma~\ref{lem:comparison}, both proved in held texts), and Schochet's derivation (used only through the restatement that \cite{ALSS24} verified). The residual risk --- a statement-level difference between a journal version and the author's own survey or a restatement --- is disclosed here rather than closed; a reader with journal access can remove it in a minute.
+
+\paragraph{The inviscid self-similar lineage.} Cited as context for the $a$-family; none of these works contains dissipative-threshold, selection, amplitude, rate-law or certified-bracket content. \cite{HQWW24}: exact self-similar blowup solutions of the inviscid model with interiorly smooth profiles for all $a\le1$ (Theorem~1.1), the far-field decay $\lim_{x\to+\infty}x^{1/c_l}\omega(x)=-C_a$ for $c_l>0$ (Theorem~2.1(3)), and the rigorous bracket $0.5269\lesssim a_c\lesssim0.7342$ for the focusing/expanding transition. \cite{HTW26}: from derivative-degenerate smooth data, one-scale self-similar blowups with regular profiles at $a>0$ and a two-scale scenario at $a\le0$ with the exact singular profiles of their Theorem~2.6. \cite{CHL26}: for the one-dimensional Hou--Luo model and the two-dimensional Boussinesq equations, numerically, asymptotically self-similar blowups with unbounded profiles and a two-stage feature. \cite{HQW25}: a class of asymptotically self-similar blowups with two collapsing scales for the classical model. \cite{Xu26}: the spectral picture of the $a=0$ collapse and the formal scaling-relevance exponent $s_*(a)=1/c_l(a)$ for fractional dissipation added to the inviscid collapse --- in the author's words a formal scaling diagnostic distinct from ``the sharp blow-up/regularity curve'', which ``remains unknown''. The staircase of Section~\ref{sec:staircase} is a two-sided bracket of that curve for canonical data at $a=0$ on the periodic domain, with the qualification of Section~\ref{sec:intro}.
+
+\paragraph{Forced blowup.} A different question was settled while this paper was being finished. With a smooth external force allowed, finite-time blowup has been constructed through the multiscale program of Córdoba and Martínez-Zoroa for the three-dimensional Euler equations \cite{CMZ23}, the incompressible porous medium equation \cite{CMZ24} and the hypodissipative Navier--Stokes equations \cite{CMZZ26}; with forcing smooth in space and time up to the blowup time, for the incompressible porous medium, Boussinesq and Euler equations by Alpöge and Buckmaster \cite{AB26a,AB26b}; and, in a preprint with an accompanying formal certificate, for the three-dimensional Navier--Stokes equations at every viscosity, together with an unforced Euler singularity from smooth compactly supported data \cite{OAI26a,OAI26b}. Those constructions choose the force to supply what dissipation removes. The threshold studied here is a property of the unforced dynamics from fixed data, and nothing in this paper bears on the forced problem; the citations are recorded so that the reader can place the two questions side by side.
+
+\paragraph{Methods.} The finite-truncation calibration of Section~\ref{sec:calibration} sits beside two classical lines that do not state it: the resonance mechanism and amplitude scaling of Galerkin-truncation artefacts in inviscid systems \cite{RF11}, and finite-size-scaling shifts of apparent critical points \cite{FF69}. The floating-point rigor model of Appendix~\ref{app:C} follows standard practice \cite{Hig02,Rum10,Joh17}.
+
+\section{Limits and open questions}\label{sec:open}
+
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em]
+\item \emph{Deep-$\nu$ walls.} The $\sigma=2$ decay edge sits at $0.052$; $0.051$ was priced at more than forty hours by the stiffness wall of the march. Above the corner the width-control step floor prices the marches (the step reaches $2^{-20}$ at the $\sigma=1.75$ trigger), so the certified decay edges sit $0.3$--$4\%$ above the measured thresholds: $0.31\%$ at $\sigma=0.5$, the closest approach, to $4.0\%$ at the $\sigma=1.5$ floor with $M=256$ ($2.0\%$ at $M=512$).
+\item \emph{The sub-corner tail-block wall.} The tail rate $\nu(M+1)^\sigma$ grows only like $M^\sigma$, so at $\sigma=0.25$ the margin over $\Sigma_{\pk}$ improves as $M^{1/4}$; decay rungs below $0.43$ there are thin-margin territory.
+\item \emph{The one-sided tail.} Extending the floor beyond $\sigma=2$ costs $A_*(8)$ of order $1.8\times10^7$ at $\sigma=2.5$ (eighteen times the conditioning of the $\sigma=2$ certificates) for a region the global-existence theory of \cite{ALSS24} already marks expected-regular; we do not attempt it.
+\item \emph{Instrument floors.} Every measured value carries its finite-$M$ floor (Section~\ref{sec:calibration}); the closed-form calibration bounds what any fixed-truncation verdict can certify.
+\item \emph{The $m^0$-row closure.} The identity \eqref{eq:m0} is factor-band grade; its residual is an instrument quantity by the tests recorded in Section~\ref{sec:laws}, and the closure of the $m^0$ row beyond factor-band grade --- equivalently the closed form of $k(\sigma)$ --- is open. The one derived account with the right sign at every row, the outer-field forcing of the $m^{\sigma-2}$ slot, is measurable only on a convergent slot tower, which does not exist.
+\item \emph{The dichotomy.} Whether $\nu_b(\sigma)=\nu_d(\sigma)$ for every $\sigma>0$ --- equivalently, whether a global solution of the canonical hierarchy can have a mode sum unbounded as $t\to\infty$ (Lemma~\ref{lem:bounded} excludes the bounded case) --- is open. It holds at $\sigma=0$ (the threshold member is global and bounded with $\sum_mq_m\equiv1$) and at $\sigma=1$ (the threshold member blows up); the brackets of Section~\ref{sec:staircase} bound the width of any exception, and the instruments of Section~\ref{sec:laws} see one flip at their resolution. No technique we hold supplies the missing lower bound on the mode sum's growth; the question is stated, not argued.
+\item \emph{The two-dimensional dial.} The same dial --- a fractional thermal diffusion of order $\sigma$ at the Hou--Luo corner of the two-dimensional Boussinesq equations, where the critical exponent is settled \cite{HKR11} and $\sigma<1$ is open --- is the subject of a companion numerical note \cite{KA26}; nothing there is a theorem.
+\end{enumerate}
+
+\subsection*{Data and code availability}
+The certificate records ($54$ files: $41$ decay, $11$ ladder and $2$ earlier $\sigma=2$ blowup certificates), the scripts that emit every table and figure from them, the measurement records behind Section~\ref{sec:laws}, and the run logs, including failed attempts and retracted readings, are archived at \url{https://github.com/UsernameLoad/clm-threshold-certificates} and deposited with a DOI at \textbf{[Zenodo DOI, inserted at posting]}. Verifying a certificate is a two-line check on its record (Appendix~\ref{app:D}).
+
+\subsection*{AI statement}
+This paper was produced with an AI system. The mathematics, the computations and the text were generated by an AI research agent (Claude, Anthropic) working under my direction; I set the objectives and the verification rules, reviewed the results, and take full responsibility for the content. Every certified statement in this paper is reproducible from the certificate records archived with the code, and every measured value from the archived scripts. No AI system is an author of this paper.
+
+
+\appendix
+
+\section{Proofs of Lemma~\ref{lem:comparison} and Lemma~\ref{lem:bounded}}\label{app:A}
+
+\begin{proof}[Proof of Lemma~\ref{lem:comparison}]
+The system \eqref{eq:A1} is triangular: the equation for $q_m$ involves only $q_1,\dots,q_{m-1}$ through its source $S_m:=\sum_{j=1}^{m-1}q_jq_{m-j}$ ($S_1\equiv0$), so by the variation-of-constants formula
+\begin{equation}\label{eq:A2}
+q_m(t)=a_me^{-\lambda_mt}+\tfrac12\int_0^te^{-\lambda_m(t-s)}S_m(s)\,ds,
+\end{equation}
+and each $q_m$ is a finite combination of exponentials and polynomials in $t$, defined for all $t\ge0$; the statement concerns the modes individually and does not depend on the convergence of $\sum_mq_m$. Induction on $m$. For $m=1$, $q_1(t)=a_1e^{-\lambda_1t}\ge a'_1e^{-\lambda'_1t}=q'_1(t)\ge0$, since $a_1\ge a'_1\ge0$ and $e^{-\lambda_1t}\ge e^{-\lambda'_1t}>0$ for $t\ge0$. Let $m\ge2$ and assume $q_j(t)\ge q'_j(t)\ge0$ for all $t\ge0$ and all $j<m$. Then $S_m(s)\ge S'_m(s)\ge0$ for every $s\ge0$, a sum of products of ordered non-negative factors, and for $0\le s\le t$ the kernels satisfy $e^{-\lambda_m(t-s)}\ge e^{-\lambda'_m(t-s)}>0$; hence in \eqref{eq:A2}
+\[
+q_m(t)=a_me^{-\lambda_mt}+\tfrac12\int_0^te^{-\lambda_m(t-s)}S_m(s)\,ds\ \ge\ a'_me^{-\lambda'_mt}+\tfrac12\int_0^te^{-\lambda'_m(t-s)}S'_m(s)\,ds=q'_m(t)\ \ge0.\qedhere
+\]
+\end{proof}
+
+\begin{remark}[the three corollaries, and Sakajo's normalisation]\label{rem:sakajo}
+(i) $\lambda_m=\nu m^\sigma$, $\lambda'_m=\nu'm^\sigma$ with $0\le\nu\le\nu'$ and equal data give Corollary~\ref{cor:comparisons}(i). (ii) $\lambda_m=\nu m^{\sigma_1}$, $\lambda'_m=\nu m^{\sigma_2}$ with $\nu\ge0$, $\sigma_1\le\sigma_2$ and equal data: since $m\ge1$, $m^{\sigma_1}\le m^{\sigma_2}$ (equality at $m=1$ for every $\sigma$), so $\lambda_m\le\lambda'_m$ and Corollary~\ref{cor:comparisons}(ii) follows. This is Sakajo's Proposition~1 in the normalisation $p_n=q_n/2$: his hierarchy $dp_n/dt=-\nu n^\alpha p_n+\sum_{k=1}^{n-1}p_kp_{n-k}$, $p_n(0)=A_n/2$, is \eqref{eq:A1} under $q=2p$, and his statement covers all real $\alpha$ and all non-negative data, as does the lemma. (iii) $\lambda=\lambda'$ and $a_m\ge a'_m\ge0$ give Corollary~\ref{cor:comparisons}(iii), Sakajo's Proposition~2, whose printed proof is exactly this induction. (iv) Transport: if $q_m\ge q'_m\ge0$ for all $m$, then $\sum_mq'_m(t)\le\sum_mq_m(t)$ for every $t$, so a bound (or the decay to zero) of the mode sum of $q$ passes to $q'$, the divergence of the mode sum of $q'$ at some $t$ passes to $q$, and the unboundedness of $\sum_mq'_m$ on a finite interval passes to $q$ --- the directions the quadrant calculus uses. (v) The factor $\tfrac12$ in \eqref{eq:A1} is the factor between $q_n$ and Sakajo's $p_n$: with $\omega=\sum_n\omega_ne^{inx}$ and sine data, $p_n=i\omega_n\ge0$ satisfies his hierarchy and $q_n:=2p_n$ satisfies \eqref{eq:A1} with $\omega(x,t)=\sum_nq_n(t)\sin nx$; the canonical datum $\cos x$ is $\sin x$ shifted by $\pi/2$, and the equation is translation invariant, so the hierarchy is the same. (vi) The mode-wise statement suffices for everything Sections~\ref{sec:comparison}--\ref{sec:staircase} use, because every transported quantity is a sum of the ordered non-negative modes. (vii) Resonance is not an issue: in \eqref{eq:A2} the source $S_m$ is a finite sum of terms $e^{\mu s}s^k$, and $\int_0^te^{-\lambda_m(t-s)}e^{\mu s}s^k\,ds$ is again of that form, with an extra polynomial factor when $\mu=-\lambda_m$; each $q_m$ is globally defined and the induction meets no singularity. (viii) ``Decay'' means $\sum_mq_m(t)\to0$; for $\sigma>0$ it is equivalent to boundedness of the mode sum (Lemma~\ref{lem:bounded}), and the landing of Section~\ref{sec:decay} certifies boundedness together with the trap's contraction, hence both.
+\end{remark}
+
+\begin{proof}[Proof of Lemma~\ref{lem:bounded}]
+Fix $M\ge1$. For $m>M$, $\lambda_m\ge\lambda_{M+1}$ and $S_m\ge0$, so \eqref{eq:A2} gives $q_m(t)\le a_m+\tfrac12\int_0^te^{-\lambda_{M+1}(t-s)}S_m(s)\,ds$. Summing over $m>M$ (all terms non-negative; Tonelli): $T_M(t)\le\sum_{m>M}a_m+\tfrac12\int_0^te^{-\lambda_{M+1}(t-s)}\sum_{m>M}S_m(s)\,ds$. Now $\sum_{m>M}S_m=\sum_{j,k\ge1,\ j+k>M}q_jq_k$, and a pair with $j+k\ge M+1$ has $j>M/2$ or $k>M/2$, so $\sum_{m>M}S_m\le2ST_{\lfloor M/2\rfloor}\le2B^2$; hence $T_M(t)\le\sum_{m>M}a_m+B^2\int_0^te^{-\lambda_{M+1}(t-s)}ds\le\sum_{m>M}a_m+B^2/\lambda_{M+1}$, which is \eqref{eq:tail}. Next, every fixed mode tends to $0$: $q_1=a_1e^{-\nu t}\to0$, and if $q_j\to0$ for all $j<m$ then $S_m\to0$ and is bounded, so the convolution in \eqref{eq:A2} tends to $0$ (split the integral at $t/2$: the first half is at most $e^{-\lambda_mt/2}(t/2)\sup S_m$, the second at most $\sup_{s\ge t/2}S_m(s)/\lambda_m$). Given $\varepsilon>0$ choose $M$ with $\sum_{m>M}a_m+B^2/\lambda_{M+1}<\varepsilon/2$ (possible because $\lambda_{M+1}=\nu(M+1)^\sigma\to\infty$ for $\sigma>0$ --- the only use of $\sigma>0$), then $t_0$ with $\sum_{m\le M}q_m(t)<\varepsilon/2$ for $t\ge t_0$; then $S(t)<\varepsilon$ for $t\ge t_0$.
+\end{proof}
+
+\begin{remark}[$\sigma>0$ is necessary]\label{rem:sigma0}
+At $\sigma=0$, $\lambda_m=\nu$ for every $m$ and \eqref{eq:tail} does not improve with $M$; indeed the canonical member at $\sigma=0$, $\nu=\tfrac12$ has the closed form $q_m(t)=e^{-t/2}(1-e^{-t/2})^{m-1}$ (the generating function $F(z,t)=ze^{-\nu t}/(1-z(1-e^{-\nu t})/(2\nu))$ of the Riccati equation $F_t=\tfrac12F^2-\nu F$), so $\sum_mq_m\equiv1$: global, bounded, and not decaying --- the mass migrates to ever higher modes. The same closed form gives $\nu_b(0)=\nu_d(0)=\tfrac12$ and, for $\nu<\tfrac12$, the blowup time $T_0(\nu)=-\ln(1-2\nu)/\nu$ of Proposition~\ref{prop:exact}.
+\end{remark}
+
+\begin{remark}[the two exact members' threshold points]\label{rem:exact}
+At $\sigma=0$ the threshold member is the bounded non-decaying solution above, so $\tfrac12$ lies in neither $B(0)$ nor $D(0)$ and $\nu_b(0)=\nu_d(0)$. At $\sigma=1$ the canonical member is Sakajo's Lemma~3, $q_m=(t/2)^{m-1}e^{-m\nu t}$, a geometric sum with ratio $r(t)=(t/2)e^{-\nu t}$ and $\max_tr=1/(2e\nu)$: for $\nu>1/(2e)$ the sum is bounded by $e^{-\nu t}/(1-r_{\max})$ and decays, and at $\nu=1/(2e)$ the ratio reaches $1$ at $t=2e$, so the sum is infinite there (Sakajo's Theorem~4 includes the equality): $1/(2e)\in B(1)$ and $\nu_b(1)=\nu_d(1)$. For $\sigma>0$ Lemma~\ref{lem:bounded} leaves, as the only possible intermediate members, global solutions whose mode sum is unbounded as $t\to\infty$.
+\end{remark}
+
+\begin{remark}[transcription checks]
+Neither lemma depends on computation, but their statements in the normalisation \eqref{eq:A1} were checked numerically as a guard against transcription errors. Lemma~\ref{lem:comparison}(ii) on the $M=48$ truncation (fourth-order Runge--Kutta, $\Delta t=10^{-3}$, $T=3$, both exponents on the same steps) at the six pairs
+\[
+(\sigma_1,\sigma_2)\in\{(0,0.25),\ (0.25,0.5),\ (0.5,1),\ (0.75,1.25),\ (1,2),\ (1.375,1.5)\}
+\]
+and $\nu\in\{0.05,0.2,0.5\}$: $q_m^{(\sigma_1)}-q_m^{(\sigma_2)}\ge0$ at every mode and every sample, the worst violation exactly $0$. The $\sigma=0$ threshold member on the $M=96$ truncation ($\Delta t=10^{-3}$, $T=4$): $q_m$ agrees with $e^{-t/2}(1-e^{-t/2})^{m-1}$ to $2.5\times10^{-14}$ and $\sum_{m\le M}q_m$ with $1-(1-e^{-t/2})^M$ to $8\times10^{-16}$; at $\nu=0.4$ the $48$-mode sum at $t=3.219$ reads $2.882901$ against the closed form's own $48$-mode truncation $2.907142\,(1-\rho^{48})=2.882901$ with $\rho=0.9051$ (the modes below any $M$ are exact for the truncated system by triangularity). The tail bound \eqref{eq:tail} on a decaying member ($\sigma=1.375$, $\nu=0.16$, $64$ modes, $T=40$, $\sup_tS=2.662$ at $t=3.67$, $S(40)=1.7\times10^{-3}$): the ratio of $\sup_tT_M$ to $B^2/(\nu(M+1)^\sigma)$ is $0.20$, $0.14$, $0.030$, $0.004$ at $M=4$, $8$, $16$, $24$.
+\end{remark}
+
+\section{The reduction}\label{app:B}
+
+\begin{proof}[Proof of Proposition~\ref{prop:reduction}]
+Let $\omega$ be a smooth real zero-mean solution of \eqref{eq:pde} on $[0,T]$ and write $\omega(x,t)=\sum_{k\ne0}w_k(t)e^{ikx}$, $w_{-k}=\bar w_k$. With $\hat H_k=-i\sgn k$, the $n$-th Fourier coefficient of $(H\omega)\omega$ for $n\ge1$ splits into pure-positive and mixed pairs,
+\[
+((H\omega)\omega)_n=\sum_{j=1}^{n-1}(-i)w_jw_{n-j}+\sum_{k\ge1}\big[w_{n+k}(+i)w_{-k}+w_{-k}(-i)w_{n+k}\big],
+\]
+and the mixed sum vanishes identically, the two terms cancelling pairwise for any real zero-mean field: this cancellation is the structural fact underlying the explicit solution of \cite{CLM85} and Sakajo's spectral formulation, and it closes the positive-frequency system autonomously. The mean stays zero. Since $(-\partial_x^2)^{\sigma/2}$ acts on mode $n$ by $\abs n^\sigma$, for $n\ge1$
+\[
+w_n'=-\nu n^\sigma w_n-i\sum_{j=1}^{n-1}w_jw_{n-j}.
+\]
+Substituting $w_m=\tfrac i2(-i)^mq_m$ turns this into \eqref{eq:hier} (the prefactor gives $-i\cdot(i/2)^2/(i/2)=\tfrac12$ for every product pair), and $\omega(\cdot,0)=\cos x$ gives $q_1(0)=1$, $q_m(0)=0$ for $m\ge2$; mode $1$ is exact, $q_1=e^{-\nu t}$. Non-negativity follows by induction through the Duhamel form $q_m(t)=\int_0^te^{-\nu m^\sigma(t-s)}F_m(s)\,ds$, $F_m=\tfrac12\sum_{j<m}q_jq_{m-j}\ge0$, which also defines the $q_m$ for all $t\ge0$ independently of the PDE, each as an iterated integral of lower ones. If a smooth solution exists on $[0,\bar t]$ its modes coincide with the $q_m$ there, and by Cauchy--Schwarz, $\sum_mq_m=2\sum_m\abs{w_m}\le2(\sum_mm^{-2s})^{1/2}(\sum_mm^{2s}\abs{w_m}^2)^{1/2}\le C_s\nrm{\omega}_{H^s}$ for $s>\tfrac12$, which is \eqref{eq:hsbound}; hence $\sum_mq_m(\bar t)=\infty$ precludes smooth continuation to $\bar t$. Conversely, if $\sum_mq_m\le B$ on $[0,T)$ then $\nrm{\omega}_\infty\le B$ and $\nrm{H\omega}_\infty\le B$ there (both are bounded by $2\sum_m\abs{w_m}$), and for every integer $k$ the tame product estimate and the non-negativity of the dissipation give $\frac{d}{dt}\nrm{\omega}_{H^k}^2\le C_k(\nrm{\omega}_\infty+\nrm{H\omega}_\infty)\nrm{\omega}_{H^k}^2$, so every Sobolev norm stays bounded on $[0,T)$ and the local theory continues the solution past $T$.
+\end{proof}
+
+\paragraph{Exact truncation and the tail sums.} For $M\ge1$ the modes $q_1,\dots,q_M$ of the system truncated at $M$ coincide with the true modes, since each $q_m$ depends only on $q_j$, $j<m$. Every inequality of Sections~\ref{sec:decay}--\ref{sec:blowup} involving $\sum_{m>M}q_m$ is proved first for the finite sums $\sum_{M<m\le M'}q_m$, which satisfy the same differential inequality with the same warm start (the right-hand sides only gain non-negative terms), and passes to the limit $M'\to\infty$ by monotone convergence.
+
+\section{The validated integrator and the floating-point rigor model}\label{app:C}
+
+\paragraph{The Lawson--Taylor-model step.} On a step $[a,a+h]$ with dyadic $h=2^{-j}$, each marched mode carries a degree-$p$ Taylor polynomial ($p=6$) in scaled coefficients $b_i=a_ih^i$ with midpoint--radius interval entries, plus a remainder bound $\rho_m\ge0$. (1) \emph{Levels.} $b_{i+1}=(-\nu m^\sigma h\,b_i+h\tilde F_i)/(i+1)$ with $\tilde F_i=\tfrac12\sum_{i_1+i_2=i}b_{i_1}*b_{i_2}$ (interval convolutions in midpoint--radius form); the scaling keeps all levels $O((\lambda h)^i)$, and the within-step radius growth from the stiff factor is a bounded constant applied only to the nonlinear increment. (2) \emph{Endpoint.} $q(a+h)\in E\,[q(a)]+\sum_{i\le p}\tilde F_i(K_i/h^i)\pm(\text{radii}+\rho)$ with $E=e^{-\nu m^\sigma h}$ and $K_i=\int_0^he^{-\nu m^\sigma(h-s)}s^i\,ds$, certified per $(m,i,j)$ by the recursion $K_i=(h^i-iK_{i-1})/(\nu m^\sigma)$ in ball arithmetic at exact inputs; the kernels are positive, so the state radius contracts through the linear part (summing absolute values of the exponential series instead would inflate radii by $e^{+\nu m^\sigma h}$ per step). (3) \emph{Remainder.} The defect (level cut plus the product tails of degrees $p+1..2p$) is kernel-integrated into $D_m$, and $\rho=K_0(S*\rho+\tfrac12\rho*\rho)+D$ is solved exactly by one forward pass --- $\rho_m$ depends only on $\rho_{j<m}$ --- and re-verified as an inequality with outward rounding, $S$ being the certified step-sup vector. The tail block of Lemma~\ref{lem:tail} and the landing of Lemma~\ref{lem:landing} take $S_m$, $\bar q_m$ from these enclosures.
+
+\paragraph{Rates.} For fractional $\sigma$ the rate $\lambda_m=\nu m^\sigma$ enters the kernels and $E$ as a ball computed from the exact rational $\nu$ and $m^\sigma$ in ball arithmetic; the level recursion's floating-point $m^\sigma$ (within two units in the last place) sits three orders below the per-operation inflation that already covers the floating-point $\nu$. At $\sigma=2$ every rate is the exact dyadic rational of the earlier pipeline, and the fractional code path is verified to contain those values.
+
+\paragraph{The rigor model.} (1) Exact inputs: $\nu$ is an exact rational, step sizes are dyadic, all times are dyadic accumulations, and the sweep end-clips its last step to hit window ends exactly. (2) Special functions from ball arithmetic: every transcendental constant used with a claimed sign or bound --- $E$, the kernels $K_i$, $A_*$, $H$, $\Lambda_{k+1}$, $\lambda_S$ --- is computed at $160$ bits at exact inputs and converted outward to double intervals with one-ulp outward rounding, positivity preserved by construction. (3) Vector kernels in doubles with a global inflation: midpoint--radius operations run in round-to-nearest, and every composite operation's rounding is covered by one global outward factor, Higham's $\gamma_n$ with $n=1200$ at least the longest dependency chain, plus an absolute underflow guard added once per operation class; radii are accumulated with upward-compatible over-estimates. (4) One-pass remainders, re-verified as inequalities, so that only the final check need be trusted. (5) Determinism: no parallel reductions and no compiler-dependent reassociation on certified paths; reruns are bit-identical. The model follows standard practice \cite{Hig02,Rum10,Joh17}; nothing in it is novel, and that is the point.
+
+\paragraph{Validation.} The integrator's battery, run at every session in which it was used and reproduced bit for bit after every edit, comprises containment of the exact exponential-sum solutions of the first eight modes along a full sweep (worst error-to-radius ratio $3\times10^{-4}$), mutual consistency under step refinement, and containment of an independent high-accuracy floating-point trajectory on all live modes (ratio $0.002$). One diagnostic false alarm during development --- a time mismatch between a reference and the end-clipped sweep --- is preserved in the records with its diagnosis: the enclosure was correct and the test was wrong, and containment references are since integrated to well below the enclosure width at the exact comparison time.
+
+\section{The certificate records}\label{app:D}
+
+Each decay certificate is a record with the fields $\sigma$, $\nu$ (exact numerator and denominator), $M$, the step count, the marched $\Sigma_{\pk}$, $\bar Y_{\max}$, the largest live relative width, the landing time, the landing quantities $\bar P$, $\bar R$, $H$ and the hull margin, and the printed theorem text. Each blowup certificate carries $\sigma$, $\nu$, $M$, $k_0$, the window $[t_1,\bar t]$, $S_{\rm lo}$ (the certified minimum of $S_{k_0}$ over the window from the lower hull), the upper ball bound $A_*(k_0)$, the margin $S_{\rm lo}/A_*$, $H$, the width and the step count, and the printed theorem text. Verifying a certificate is a two-line check: for blowup, margin $\ge2$ and $\bar t-t_1\ge H$; for decay, $\bar P<\lambda_S$ and the hull inequality of Lemma~\ref{lem:landing}(iv) at margin $\ge3$. Every table of this paper is emitted from the records by a script; the staircase is re-derived from them inside the figure generator and checked against the emitted tables before drawing; and the records of every failed attempt --- aborted marches, declined rungs, refuted registered predictions --- are kept beside the certificates.
+
+\begin{thebibliography}{99}
+\bibitem{AB26a} L. Alpöge, T. Buckmaster, \emph{Blowup for the Euler equations with smooth forcing}, preprint (2026), \url{https://cims.nyu.edu/~tristanb/euler.pdf}.
+\bibitem{AB26b} L. Alpöge, T. Buckmaster, \emph{Blowup for the Boussinesq equations with smooth forcing}, preprint (2026), \url{https://cims.nyu.edu/~tristanb/boussinesq.pdf}.
+\bibitem{ALSS24} D.~M. Ambrose, P.~M. Lushnikov, M. Siegel, D.~A. Silantyev, \emph{Global existence and singularity formation for the generalized Constantin--Lax--Majda equation with dissipation: the real line vs.\ periodic domains}, Nonlinearity 37 (2024) 025004, DOI 10.1088/1361-6544/ad140c; arXiv:2207.07548.
+\bibitem{Chen20} J. Chen, \emph{Singularity formation and global well-posedness for the generalized Constantin--Lax--Majda equation with dissipation}, Nonlinearity 33 (2020) 2502--2532, DOI 10.1088/1361-6544/ab74b0; arXiv:1908.09385.
+\bibitem{CHL26} B. Chen, D. Huang, X. Li, \emph{Novel self-similar finite-time blowups with singular profiles of the 1D Hou--Luo model and the 2D Boussinesq equations: a numerical investigation}, arXiv:2604.01868 (2026).
+\bibitem{CLM85} P. Constantin, P.~D. Lax, A. Majda, \emph{A simple one-dimensional model for the three-dimensional vorticity equation}, Comm. Pure Appl. Math. 38 (1985) 715--724.
+\bibitem{CMZ23} D. Córdoba, L. Martínez-Zoroa, \emph{Blow-up for the incompressible 3D-Euler equations with uniform $C^{1,1/2-\epsilon}\cap L^2$ force}, arXiv:2309.08495 (2023).
+\bibitem{CMZ24} D. Córdoba, L. Martínez-Zoroa, \emph{Finite time singularities of smooth solutions for the 2D incompressible porous media (IPM) equation with a smooth source}, arXiv:2410.22920 (2024).
+\bibitem{CMZZ26} D. Córdoba, L. Martínez-Zoroa, F. Zheng, \emph{Finite time blow-up for the hypodissipative Navier--Stokes equations with a force in $L^1_tC^{1,\epsilon}_x\cap L^\infty_tL^2_x$}, Arch. Ration. Mech. Anal. 250 (2026), article 38, DOI 10.1007/s00205-026-02198-0.
+\bibitem{FF69} A.~E. Ferdinand, M.~E. Fisher, \emph{Bounded and inhomogeneous Ising models. I. Specific-heat anomaly of a finite lattice}, Phys. Rev. 185 (1969) 832--846.
+\bibitem{Hig02} N.~J. Higham, \emph{Accuracy and Stability of Numerical Algorithms}, 2nd ed., SIAM (2002).
+\bibitem{HKR11} T. Hmidi, S. Keraani, F. Rousset, \emph{Global well-posedness for Euler--Boussinesq system with critical dissipation}, Comm. Partial Differential Equations 36 (2011) 420--445, DOI 10.1080/03605302.2010.518657.
+\bibitem{HQW25} D. Huang, X. Qin, X. Wang, \emph{Multi-scale self-similar finite-time blowups of the Constantin--Lax--Majda model for the 3D Euler equations}, SIAM J. Math. Anal. 57 (2025) 4068--4096, DOI 10.1137/24M168845X; arXiv:2401.14615.
+\bibitem{HQWW24} D. Huang, X. Qin, X. Wang, D. Wei, \emph{Self-similar finite-time blowups with smooth profiles of the generalized Constantin--Lax--Majda model}, Arch. Ration. Mech. Anal. 248 (2024), article 22, DOI 10.1007/s00205-024-01971-3; arXiv:2305.05895.
+\bibitem{HTW26} D. Huang, J. Tong, X. Wang, \emph{Self-similar finite-time blowups with singular profiles of the generalized Constantin--Lax--Majda model: theoretical and numerical investigations}, Nonlinearity 39 (2026) 095005, DOI 10.1088/1361-6544/ae9e21; arXiv:2603.25104 (the text used is the arXiv version).
+\bibitem{Joh17} F. Johansson, \emph{Arb: efficient arbitrary-precision midpoint-radius interval arithmetic}, IEEE Trans. Computers 66 (2017) 1281--1292.
+\bibitem{KA26} K. Ahmed, \emph{The $\sigma$-dial at the Hou--Luo corner: a bench note on the 2D Boussinesq equations with fractional thermal diffusion between walls}, preprint (2026).
+\bibitem{OAI26a} OpenAI, \emph{Finite time blowup for Navier--Stokes}, preprint (2026), \url{https://cdn.openai.com/pdf/32d9f210-8b73-45e0-91bc-82a30aef8a9a/navier-stokes.pdf}; Lean certificate at \url{https://github.com/openai/NavierStokesAndEuler}.
+\bibitem{OAI26b} OpenAI, \emph{Finite time blowup for the Euler equation}, preprint (2026), \url{https://cdn.openai.com/pdf/315b36cd-ec98-4023-8342-93345194ece1/euler.pdf}.
+\bibitem{OSW08} H. Okamoto, T. Sakajo, M. Wunsch, \emph{On a generalization of the Constantin--Lax--Majda equation}, Nonlinearity 21 (2008) 2447--2461, DOI 10.1088/0951-7715/21/10/013.
+\bibitem{RF11} S.~S. Ray, U. Frisch, S. Nazarenko, T. Matsumoto, \emph{Resonance phenomenon for the Galerkin-truncated Burgers and Euler equations}, Phys. Rev. E 84 (2011) 016301.
+\bibitem{Rum10} S.~M. Rump, \emph{Verification methods: rigorous results using floating-point arithmetic}, Acta Numerica 19 (2010) 287--449.
+\bibitem{Sak03a} T. Sakajo, \emph{On global solutions for the Constantin--Lax--Majda equation with a generalized viscosity term}, Nonlinearity 16 (2003) 1319--1328, DOI 10.1088/0951-7715/16/4/307 (not read; cited at metadata level).
+\bibitem{Sak03b} T. Sakajo, \emph{Blow-up solutions of the Constantin--Lax--Majda equation with a generalized viscosity term}, J. Math. Sci. Univ. Tokyo 10 (2003) 187--207.
+\bibitem{Sak03c} T. Sakajo, \emph{Analytic properties of the Constantin--Lax--Majda equation with a generalized viscosity term}, RIMS Kôkyûroku 1326 (2003) 32--43.
+\bibitem{Sch86} S. Schochet, \emph{Explicit solutions of the viscous model vorticity equation}, Comm. Pure Appl. Math. 39 (1986) 531--537, DOI 10.1002/cpa.3160390404 (not read; the statement is held through \cite[\S5.1]{ALSS24}).
+\bibitem{SLSA25} D.~A. Silantyev, P.~M. Lushnikov, M. Siegel, D.~M. Ambrose, \emph{Exact periodic solutions of the generalized Constantin--Lax--Majda equation with dissipation}, Stud. Appl. Math. 155 (2025) e70115, DOI 10.1111/sapm.70115; arXiv:2411.01891.
+\bibitem{Xu26} J. Xu, \emph{The spectral picture of self-similar collapse in the Constantin--Lax--Majda equation}, arXiv:2607.19762 (2026).
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,50 @@
+python 3.12.3 | numpy 2.4.4 | scipy 1.17.1
+==========================================================================
+V1  |q_t - (q^2/2 + nu q_xx)|_inf (random band-limited w): 2.478e-14
+V2  symbolic recursion residual, modes 1..5 nonzero at: none (all zero)
+V3  float64 vs mpmath(40dps) exact series, nu=0.25, m<=24, t=1: 4.163e-17   [1.6 s]
+--------------------------------------------------------------------------
+nu=0.000  t_stop=1.940 (strip collapsed (delta*K<12))  strict_horizon=1.830  sup(t_stop)=1.692e+01  [25 s]
+    verdict: BLOWUP (strip collapse) | T_est lin 2.0081 quad 2.0001  (exact T*=2)
+    delta_est(nu=0, t=1.75) = 0.1336  | exact ln(2/t) = 0.1335
+nu=0.010  t_stop=2.270 (strip collapsed (delta*K<12))  strict_horizon=2.120  sup(t_stop)=6.600e+01  [29 s]
+    t=0.5  (i)vs(ii): 4.996e-14
+    t=1.0  (i)vs(ii): 1.926e-14
+    t=1.2  (i)vs(ii): 2.437e-14
+    verdict: BLOWUP (strip collapse) | T_est lin 2.2854 quad 2.3184
+    [mpmath exact series nu=0.05 M=24 built, 1 s]
+nu=0.050  t_stop=5.560 (strip collapsed (delta*K<12))  strict_horizon=4.550  sup(t_stop)=2.548e+02  [72 s]
+    t=0.5  (i)vs(ii): 2.668e-13   (i)vs(iii,mp) per-mode m<=24: 9.726e-06
+    t=1.0  (i)vs(ii): 1.623e-12   (i)vs(iii,mp) per-mode m<=24: 8.039e-06
+    t=1.2  (i)vs(ii): 4.863e-14   (i)vs(iii,mp) per-mode m<=24: 5.428e-06
+    verdict: BLOWUP (strip collapse) | T_est lin 5.9174 quad nan
+V4  conditioning diagnostic, nu=0.05, t=1.0, modes m<=24
+    mpmath dps=40 vs dps=100 : 0.000e+00
+    dps=100 vs DOP853        : 8.039e-06
+    dps=40  vs DOP853        : 8.039e-06
+    float64 vs DOP853        : 4.999e-05
+    max |B[ 8][p]| (float64) : 1.218e+04   |c_8(1.0)| = 2.350e-03
+    max |B[16][p]| (float64) : 1.012e+08   |c_16(1.0)| = 1.439e-06
+    max |B[24][p]| (float64) : 6.975e+11   |c_24(1.0)| = 4.999e-05
+V4b fixed mp_eval (mpmath-native exponent), nu=0.05, m<=24
+    t=0.5  exact series(mp) vs DOP853: 3.497e-15
+    t=1.0  exact series(mp) vs DOP853: 5.927e-15
+    t=1.2  exact series(mp) vs DOP853: 4.457e-15
+    regression check nu=0.25 f64 vs mp: 4.163e-17
+nu=0.100  t_stop=6.000 (Tmax)  strict_horizon=n/a  sup(t_stop)=1.396e+00  [78 s]
+    t=0.5  (i)vs(ii): 1.519e-13
+    t=1.0  (i)vs(ii): 2.258e-12
+    t=1.2  (i)vs(ii): 1.168e-13
+    verdict: DECAY (sup decreasing at Tmax) | T_est lin nan quad nan
+nu=0.250  t_stop=5.000 (Tmax)  strict_horizon=n/a  sup(t_stop)=3.118e-01  [66 s]
+    t=0.5  (i)vs(ii): 3.378e-12   (i)vs(iii,f64): 8.438e-15  tail<=8.1e-42
+    t=1.0  (i)vs(ii): 1.863e-12   (i)vs(iii,f64): 1.121e-14  tail<=5.4e-49
+    t=1.2  (i)vs(ii): 4.013e-14   (i)vs(iii,f64): 1.199e-14  tail<=1.4e-50
+    verdict: DECAY (sup decreasing at Tmax) | T_est lin nan quad nan
+--------------------------------------------------------------------------
+R4  nu=0.05: N=1024 stop 5.560 (strip collapsed (delta*K<12)) T_lin=5.9174 T_quad=nan
+             N=2048 stop 6.000 (Tmax) T_lin=6.2518 T_quad=nan  [141 s]
+--------------------------------------------------------------------------
+R5  gCLM a=1: drift from steady state -sin(x) after t=5: 3.251e-15
+figure saved: clm_viscous.png
+==========================================================================

@@ -1,0 +1,26 @@
+stage u: rung-4 unit tests
+U1  sympy: theta-hierarchy -> a=-1 omega-hierarchy under c=imb, m<=5: all match
+U2  |d/dx rhs_th - rhs_g(theta_x, a=-1)|_inf     : 4.974e-14
+U3  |u[theta_x] - H theta|_inf                   : 4.441e-16
+U4  |mean(rhs_th) - (-sum|k||theta_k|^2)|        : 0.000e+00
+U5  theta-hierarchy vs FFT rhs (modes<=20)       : 2.291e-13
+[0.7 s]
+stage c0: complex e^{ix} vs triangular hierarchy
+  t=0.1: max_m|theta_m - b_m| = 7.487e-15   (|b_48| = 7.7e-30)
+  t=0.2: max_m|theta_m - b_m| = 5.575e-14   (|b_48| = 1.2e-15)
+  t=0.3: max_m|theta_m - b_m| = 1.778e-11   (|b_48| = 2.2e-07)
+[1 s]
+stage bal: balance-law residual along the flow
+  max |mean(rhs) + ||theta||_{H^1/2}^2| over t<=0.8: 1.665e-16
+[14 s]
+stage a1: theta_x vs omega cross-solver consistency
+  N=1024 dt=2.50e-05:  t=0.25: 3.018e-12 | t=0.50: 3.821e-12 | t=0.75: 4.732e-12 | t=1.00: 5.872e-12
+  N=1024 dt=1.25e-05:  t=0.25: 3.435e-12 | t=0.50: 4.757e-12 | t=0.75: 6.322e-12 | t=1.00: 7.956e-12
+  N=2048 dt=1.25e-05:  t=0.25: 9.245e-12 | t=0.50: 1.188e-11 | t=0.75: 1.889e-11 | t=1.00: 1.987e-11
+[304 s]
+stage T: a=-1 ride from theta0 = sin x (omega0 = cos x), N=2048
+  strip stop at t=1.14500 (deltaK=6.0, sup=4.355)
+  window 0.20: T_lin=1.29993 T_quad=1.27897  (last t=1.14500, sup=4.355, growth x4.4)
+  window 0.10: T_lin=1.29993 T_quad=1.27897  (last t=1.14500, sup=4.355, growth x4.4)
+  window 0.05: T_lin=1.29773 T_quad=1.27685  (last t=1.14500, sup=4.355, growth x4.4)
+[76 s]

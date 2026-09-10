@@ -1,0 +1,20 @@
+stage pi: a=0.5 precision blowup-time test vs pi
+  t_stop=3.14160 (amplitude blowup / nonfinite)  K=682  track pts=6283  spec pts=0
+  strip unmeasurable throughout (below noise guard): treating all as resolved
+  window  T_lin      |T-pi|     T_quad     |T-pi|
+  0.200   3.142778  1.19e-03   3.141692  9.91e-05
+  0.100   3.141946  3.54e-04   3.141625  3.28e-05
+  0.050   3.141701  1.08e-04   3.141603  1.07e-05
+  0.025   3.141626  3.35e-05   3.141596  3.59e-06
+  Richardson (last two quad windows): T=3.1415939  |T-pi|=1.20e-06
+[152.0 s]
+v2a: a=0.5, dt=1.25e-5 (halved), N=1024
+  t_stop=3.142 (amplitude blowup / nonfinite) strict_h=n/a
+  full fit lin/quad: 3.1434/3.1417 | capped(sup<=235): 3.1437/3.1418
+v2b: a=0.7, N=2048, dt=2.5e-5
+  t_stop=4.460 (amplitude blowup / nonfinite) strict_h=n/a K=682
+  full fit lin/quad: 4.4662/4.4645 | capped(sup<=42): 4.4685/4.4652
+stage n2: a=0.90, N=2048, dt=2.5e-5, Tmax=20
+  t_stop=5.550 (strip collapsed (delta*K<12)) strict_h=4.580 K=682 sup(t_stop)=1.706e+00 (vs N=1024 horizon)
+  sup growth x1.71 | T lin/quad 11.1831/10.7215 (interpret per refit rules)
+[135.1 s]

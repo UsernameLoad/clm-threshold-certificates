@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "Certified threshold bounds for the dissipative Constantin-Lax-Majda family"
+message: "If you use this material, please cite the relevant paper."
+type: dataset
+authors:
+  - family-names: Ahmed
+    given-names: Khalid
+    orcid: "https://orcid.org/0009-0005-3291-7993"
+license: MIT

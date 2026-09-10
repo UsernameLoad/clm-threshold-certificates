@@ -1,0 +1,35 @@
+python 3.12.3 | numpy 2.4.4
+========================================================================
+U1  |H(cos)-sin|_inf                  : 7.772e-16
+U2  |H(sin)+cos|_inf                  : 7.772e-16
+U3  |H(fHf)-((Hf)^2-f^2)/2|_inf       : 9.758e-19   (random band-limited f, seed 0)
+U5  |H(w_ex)-Hw_ex|_inf, t<=1.5       : 6.217e-15
+U4  sympy (w_t - w*Hw)*D^2            : 0
+U4  sympy (z_t - z^2/2)*D^2           : 0
+------------------------------------------------------------------------
+R1  spatial convergence at t=1.5 (dt=5e-5); predicted floor (0.75)^K
+    N=   64  K=  21  err=7.820e-03  pred=2.378e-03
+    N=  128  K=  42  err=2.096e-05  pred=5.657e-06
+    N=  256  K=  85  err=8.906e-11  pred=2.400e-11
+    N=  512  K= 170  err=3.553e-14  pred=5.760e-22
+    fitted decay rate (N=64..256): 0.2861   | predicted ln(4/3) = 0.2877
+------------------------------------------------------------------------
+R2  temporal order at t=1.8, N=1024
+    dt=8.0e-04  err=2.910e-11
+    dt=4.0e-04  err=1.821e-12
+    dt=2.0e-04  err=1.164e-13
+    observed order: 4.00
+    observed order: 3.97
+------------------------------------------------------------------------
+R3  headline: N=1024, dt=5e-5, checkpoints to t=1.9 (T*=2)
+    K=341;  columns: on-grid err | 4x off-grid err | sup-norm err | pred floor (t/2)^K
+    t=0.50  1.932e-14  1.976e-14  2.611e-07  4.984e-206
+    t=1.00  2.665e-14  2.909e-14  1.080e-06  2.232e-103
+    t=1.50  5.951e-14  5.906e-14  8.561e-10  2.488e-43
+    t=1.80  1.217e-13  1.412e-13  1.093e-04  2.493e-16
+    t=1.85  3.500e-11  3.783e-11  6.990e-05  2.847e-12
+    t=1.90  4.727e-07  5.027e-07  8.338e-04  2.534e-08
+    max mean drift over run: 9.714e-17 (mean is an exact invariant)
+    figure saved: clm_calibration.png
+========================================================================
+wall time: 32.2 s

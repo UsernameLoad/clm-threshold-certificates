@@ -1,0 +1,213 @@
+<path>:367: RuntimeWarning: invalid value encountered in power
+  v = np.exp(logA)*(t0 - t)**(-p) - np.exp(logB)*e*(t0 - t)**(-kap)
+stage pfit: nu* = 0.05057 (N16); tracks:
+   nu=0.050600  peak=2.078907e+05 t_peak=8.2056 tail/pk=1.5e-03  excluded (truncation-biased peak)
+   nu=0.050700  peak=6.640986e+04 t_peak=8.1894 tail/pk=6.4e-04  excluded (truncation-biased peak)
+   nu=0.050800  peak=2.893137e+04 t_peak=8.1733 tail/pk=3.6e-06  excluded (truncation-biased peak)
+   nu=0.050900  peak=1.421553e+04 t_peak=8.1572 tail/pk=1.3e-07  CLEAN
+   nu=0.051000  peak=8.435676e+03 t_peak=8.1412 tail/pk=3.9e-09  CLEAN
+   nu=0.051200  peak=3.975473e+03 t_peak=8.1092 tail/pk=4.7e-07  CLEAN
+   nu=0.051600  peak=1.515455e+03 t_peak=8.0458 tail/pk=4.3e-10  CLEAN
+   nu=0.052200  peak=6.204343e+02 t_peak=7.9522 tail/pk=7.8e-15  CLEAN
+   nu=0.053000  peak=2.881103e+02 t_peak=7.8299 tail/pk=3.0e-21  CLEAN
+   nu=0.054000  peak=1.502307e+02 t_peak=7.6809 tail/pk=1.7e-29  CLEAN
+A) peak locus (all 7 clean peaks; fixed-p linear fits of t_peak vs S^(-1/p)):
+   p=1.00: t0=8.1184  c=71.06   rms(t_peak resid)=3.65e-02
+   p=1.50: t0=8.1652  c=14.13   rms(t_peak resid)=1.33e-02
+   p=2.00: t0=8.2124  c=6.503   rms(t_peak resid)=6.49e-04
+   p=2.50: t0=8.2602  c=4.202   rms(t_peak resid)=9.64e-03
+   p=3.00: t0=8.3085  c=3.216   rms(t_peak resid)=1.59e-02
+   free-p:  t0=8.2097  c=6.72  p=1.9714   rms=1.26e-04
+   free-p, 5 nearest peaks: t0=8.2104  c=6.612  p=1.9829  rms=1.33e-08
+   (t0 - t_peak) ~ eps^q on 6 nearest: q = 0.9859  (q = p/... = gamma/p; scenario II predicts 1)
+B) climb fits, Sigma* ~ A (t0-t)^-p:
+   single nu=0.0509  S in [30, 0.03 pk]: t0 fixed 8.2104 -> p=4.3219 A=1.47e+04 (rms 2.3e-02); t0 free 8.4000 -> p=4.6054 A=2.67e+04
+   single nu=0.0509  S in [30, 0.10 pk]: t0 fixed 8.2104 -> p=3.8812 A=9.35e+03 (rms 5.5e-02); t0 free 8.4000 -> p=4.2049 A=1.72e+04
+   single nu=0.0509  S in [30, 0.30 pk]: t0 fixed 8.2104 -> p=3.2437 A=5.68e+03 (rms 1.2e-01); t0 free 8.4000 -> p=3.6149 A=1.03e+04
+   single nu=0.0510  S in [30, 0.03 pk]: t0 fixed 8.2104 -> p=4.3574 A=1.48e+04 (rms 1.7e-02); t0 free 8.4000 -> p=4.6222 A=2.64e+04
+   single nu=0.0510  S in [30, 0.10 pk]: t0 fixed 8.2104 -> p=3.9024 A=8.97e+03 (rms 4.7e-02); t0 free 8.4000 -> p=4.2001 A=1.61e+04
+   single nu=0.0510  S in [30, 0.30 pk]: t0 fixed 8.2104 -> p=3.2513 A=5.08e+03 (rms 1.1e-01); t0 free 8.4000 -> p=3.5871 A=8.98e+03
+   single nu=0.0512  S in [30, 0.03 pk]: t0 fixed 8.2104 -> p=4.3871 A=1.46e+04 (rms 7.9e-03); t0 free 8.4000 -> p=4.6293 A=2.53e+04
+   single nu=0.0512  S in [30, 0.10 pk]: t0 fixed 8.2104 -> p=3.9162 A=8.33e+03 (rms 3.4e-02); t0 free 8.4000 -> p=4.1819 A=1.45e+04
+   single nu=0.0512  S in [30, 0.30 pk]: t0 fixed 8.2104 -> p=3.2468 A=4.29e+03 (rms 9.1e-02); t0 free 8.4000 -> p=3.5385 A=7.29e+03
+   Richardson (eliminates O(eps); windows relative to the smaller-eps track's peak):
+   pair (0.0509,0.0510) f=0.1: t0 fixed -> p=4.2831 A=1.64e+04 (rms 4.5e-02); t0 free 8.4000 -> p=4.6396 A=3.22e+04
+   pair (0.0509,0.0510) f=0.3: t0 fixed -> p=3.6929 A=1.04e+04 (rms 1.1e-01); t0 free 8.4000 -> p=4.1140 A=2.04e+04
+   pair (0.0509,0.0510) f=0.6: t0 fixed -> p=2.9458 A=7.1e+03 (rms 2.2e-01); t0 free 8.4000 -> p=3.4180 A=1.32e+04
+   pair (0.0510,0.0512) f=0.1: t0 fixed -> p=4.3017 A=1.62e+04 (rms 4.1e-02); t0 free 8.4000 -> p=4.6295 A=3.09e+04
+   pair (0.0510,0.0512) f=0.3: t0 fixed -> p=3.6758 A=9.38e+03 (rms 1.1e-01); t0 free 8.4000 -> p=4.0545 A=1.79e+04
+   pair (0.0510,0.0512) f=0.6: t0 fixed -> p=2.9059 A=5.87e+03 (rms 2.1e-01); t0 free 8.4000 -> p=3.3228 A=1.06e+04
+   triple 2nd-order f=0.1: t0 fixed -> p=4.4334 A=1.96e+04 (rms 3.6e-02); t0 free 8.4000 -> p=4.8019 A=3.93e+04
+   triple 2nd-order f=0.3: t0 fixed -> p=3.9150 A=1.31e+04 (rms 9.9e-02); t0 free 8.4000 -> p=4.3602 A=2.68e+04
+   triple 2nd-order f=0.6: t0 fixed -> p=3.1767 A=9.04e+03 (rms 2.2e-01); t0 free 8.4000 -> p=3.6842 A=1.76e+04
+C) adjacent-pair separations, sep ~ B*dnu*(t0-t)^-kappa:
+   pair (0.0509,0.0510) [9224 pts]: t0 fixed -> kappa=1.3517 B=8.043e+06 (rms 8.1e-01); t0 free 8.4000 -> kappa=2.1074
+   pair (0.0510,0.0512) [4122 pts]: t0 fixed -> kappa=2.6158 B=4.053e+06 (rms 5.1e-01); t0 free 8.4000 -> kappa=3.1799
+   pair (0.0512,0.0516) [1161 pts]: t0 fixed -> kappa=4.0038 B=4.233e+06 (rms 2.9e-01); t0 free 8.4000 -> kappa=4.4562
+   pair (0.0516,0.0522) [671 pts]: t0 fixed -> kappa=3.6036 B=1.787e+06 (rms 2.9e-01); t0 free 8.4000 -> kappa=3.9803
+   pair (0.0522,0.0530) [513 pts]: t0 fixed -> kappa=2.5953 B=4.425e+05 (rms 3.6e-01); t0 free 8.4000 -> kappa=2.9014
+   pair (0.0530,0.0540) [395 pts]: t0 fixed -> kappa=1.5622 B=1.101e+05 (rms 4.3e-01); t0 free 8.4000 -> kappa=1.8057
+D) global fit  Sigma_nu(t) = A(t0-t)^-p - B eps (t0-t)^-kappa  (climb, S>=20, S<=0.35 pk):
+Traceback (most recent call last):
+  File "<path>", line 402, in <module>
+    elif st == "pfit":  stage_pfit()
+                        ~~~~~~~~~~^^
+  File "<path>", line 373, in stage_pfit
+    print("   [%d pts] A=%.4g  t0=%.4f  p=%.4f  B=%.4g  kappa=%.4f   rms(log)=%.2e"
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          % (len(SS), A_, t0_, p_, B_, k_))
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TypeError: not enough arguments for format string
+   single nu=0.0510  S in [30, 0.03 pk]: t0 fixed 8.2104 -> p=4.3574 A=1.48e+04 (rms 1.7e-02); t0 free 8.4000 -> p=4.6222 A=2.64e+04
+   single nu=0.0510  S in [30, 0.10 pk]: t0 fixed 8.2104 -> p=3.9024 A=8.97e+03 (rms 4.7e-02); t0 free 8.4000 -> p=4.2001 A=1.61e+04
+   single nu=0.0510  S in [30, 0.30 pk]: t0 fixed 8.2104 -> p=3.2513 A=5.08e+03 (rms 1.1e-01); t0 free 8.4000 -> p=3.5871 A=8.98e+03
+   single nu=0.0512  S in [30, 0.03 pk]: t0 fixed 8.2104 -> p=4.3871 A=1.46e+04 (rms 7.9e-03); t0 free 8.4000 -> p=4.6293 A=2.53e+04
+   single nu=0.0512  S in [30, 0.10 pk]: t0 fixed 8.2104 -> p=3.9162 A=8.33e+03 (rms 3.4e-02); t0 free 8.4000 -> p=4.1819 A=1.45e+04
+   single nu=0.0512  S in [30, 0.30 pk]: t0 fixed 8.2104 -> p=3.2468 A=4.29e+03 (rms 9.1e-02); t0 free 8.4000 -> p=3.5385 A=7.29e+03
+   Richardson (eliminates O(eps); windows relative to the smaller-eps track's peak):
+   pair (0.0509,0.0510) f=0.1: t0 fixed -> p=4.2831 A=1.64e+04 (rms 4.5e-02); t0 free 8.4000 -> p=4.6396 A=3.22e+04
+   pair (0.0509,0.0510) f=0.3: t0 fixed -> p=3.6929 A=1.04e+04 (rms 1.1e-01); t0 free 8.4000 -> p=4.1140 A=2.04e+04
+   pair (0.0509,0.0510) f=0.6: t0 fixed -> p=2.9458 A=7.1e+03 (rms 2.2e-01); t0 free 8.4000 -> p=3.4180 A=1.32e+04
+   pair (0.0510,0.0512) f=0.1: t0 fixed -> p=4.3017 A=1.62e+04 (rms 4.1e-02); t0 free 8.4000 -> p=4.6295 A=3.09e+04
+   pair (0.0510,0.0512) f=0.3: t0 fixed -> p=3.6758 A=9.38e+03 (rms 1.1e-01); t0 free 8.4000 -> p=4.0545 A=1.79e+04
+   pair (0.0510,0.0512) f=0.6: t0 fixed -> p=2.9059 A=5.87e+03 (rms 2.1e-01); t0 free 8.4000 -> p=3.3228 A=1.06e+04
+   triple 2nd-order f=0.1: t0 fixed -> p=4.4334 A=1.96e+04 (rms 3.6e-02); t0 free 8.4000 -> p=4.8019 A=3.93e+04
+   triple 2nd-order f=0.3: t0 fixed -> p=3.9150 A=1.31e+04 (rms 9.9e-02); t0 free 8.4000 -> p=4.3602 A=2.68e+04
+   triple 2nd-order f=0.6: t0 fixed -> p=3.1767 A=9.04e+03 (rms 2.2e-01); t0 free 8.4000 -> p=3.6842 A=1.76e+04
+C) adjacent-pair separations sep ~ B*dnu*(t0-t)^-kappa, near-peak window u in [1.5,10]*u_pk(nu2):
+   pair (0.0509,0.0510) [5444 pts]: t0 fixed -> kappa=0.4209 B=2.742e+07 (rms 9.7e-02); t0 free 8.4000 -> kappa=0.7205
+   pair (0.0510,0.0512) [4190 pts]: t0 fixed -> kappa=0.6259 B=9.168e+06 (rms 1.4e-01); t0 free 8.4000 -> kappa=0.9422
+   pair (0.0512,0.0516) [2604 pts]: t0 fixed -> kappa=0.9819 B=2.348e+06 (rms 2.2e-01); t0 free 8.4000 -> kappa=1.3043
+   pair (0.0516,0.0522) [1283 pts]: t0 fixed -> kappa=1.3748 B=6.836e+05 (rms 3.0e-01); t0 free 8.4000 -> kappa=1.6778
+   pair (0.0522,0.0530) [643 pts]: t0 fixed -> kappa=1.8039 B=2.819e+05 (rms 3.8e-01); t0 free 8.4000 -> kappa=2.0880
+   pair (0.0530,0.0540) [347 pts]: t0 fixed -> kappa=2.3109 B=1.68e+05 (rms 4.9e-01); t0 free 8.4000 -> kappa=2.5859
+D0) near-peak shape fits, (p,kappa)=(2,3) FIXED: Sigma = A u^-2 - Beps u^-3, u=t0-t,
+    window u in [0.8, 8]*u_pk; params (A, Beps, t0) per track; model peak checks:
+   nu=0.0509 [3950 pts]: A=3.29e+04  B=Beps/eps=5.839e+07  t0=8.9943  rms(log)=3.49e-03 | model peak: S=1.42e+04 (obs 1.422e+04), u*=0.8787 (obs 0.8371)
+   nu=0.0510 [2989 pts]: A=2.268e+04  B=Beps/eps=3.329e+07  t0=9.0318  rms(log)=5.32e-03 | model peak: S=8432 (obs 8436), u*=0.9468 (obs 0.8906)
+   nu=0.0512 [1977 pts]: A=1.301e+04  B=Beps/eps=1.437e+07  t0=9.0687  rms(log)=9.75e-03 | model peak: S=3982 (obs 3975), u*=1.0437 (obs 0.9595)
+   nu=0.0516 [1134 pts]: A=6156  B=Beps/eps=4.615e+06  t0=9.0705  rms(log)=2.11e-02 | model peak: S=1530 (obs 1515), u*=1.1581 (obs 1.0246)
+   nu=0.0522 [655 pts]: A=2962  B=Beps/eps=1.508e+06  t0=9.0074  rms(log)=4.28e-02 | model peak: S=637.7 (obs 620.4), u*=1.2443 (obs 1.0552)
+   nu=0.0530 [394 pts]: A=1522  B=Beps/eps=5.39e+05  t0=8.8795  rms(log)=7.75e-02 | model peak: S=304.6 (obs 288.1), u*=1.2907 (obs 1.0496)
+   nu=0.0540 [248 pts]: A=851.5  B=Beps/eps=2.174e+05  t0=8.7151  rms(log)=1.24e-01 | model peak: S=164.5 (obs 150.2), u*=1.3135 (obs 1.0342)
+D) global near-peak fit  Sigma_nu(t) = A(t0-t)^-p - B eps (t0-t)^-kappa, u in [0.8,8]*u_pk:
+Traceback (most recent call last):
+  File "<path>", line 421, in <module>
+    elif st == "pfit":  stage_pfit()
+                        ~~~~~~~~~~^^
+  File "<path>", line 398, in stage_pfit
+    pD, _ = curve_fit(mD, (TT, EE), np.log(SS), p0=(np.log(120.), t0A, 2.0, np.log(12000.), 3.0),
+            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      maxfev=400000)
+                      ^^^^^^^^^^^^^^
+  File "<path>", line 1029, in curve_fit
+    raise RuntimeError("Optimal parameters not found: " + errmsg)
+RuntimeError: Optimal parameters not found: Number of calls to function has reached maxfev = 400000.
+stage lam: local rate lambda = d lnSigma/dt; 1/lambda linear <=> power law
+  nu=0.0506 (M=1024, cap=7.19e+03): S=30     t=4.165 1/lam=0.8025 | S=100    t=4.952 1/lam=0.6773 | S=300    t=5.632 1/lam=0.5637 | S=1000   t=6.244 1/lam=0.4524 | S=3000   t=6.692 1/lam=0.3659
+      1/lam fit on S in [240, 7.19e+03] (2060 pts): slope=-0.1907 -> p_hat=5.242, root t0_hat=8.6082, rms=1.05e-03
+  nu=0.0507 (M=1024, cap=7.19e+03): S=30     t=4.172 1/lam=0.8107 | S=100    t=4.980 1/lam=0.6877 | S=300    t=5.670 1/lam=0.5795 | S=1000   t=6.304 1/lam=0.4758 | S=3000   t=6.783 1/lam=0.4000
+      1/lam fit on S in [240, 7.19e+03] (2258 pts): slope=-0.1540 -> p_hat=6.495, root t0_hat=9.3981, rms=2.56e-03
+  nu=0.0508 (M=2048, cap=2.31e+04): S=30     t=4.180 1/lam=0.8190 | S=100    t=4.994 1/lam=0.7004 | S=300    t=5.708 1/lam=0.5965 | S=1000   t=6.369 1/lam=0.5024 | S=3000   t=6.886 1/lam=0.4439 | S=10000  t=7.409 1/lam=0.4458
+      1/lam fit on S in [772, 2.31e+04] (9017 pts): slope=0.1651 -> p_hat=-6.055, root t0_hat=4.3105, rms=6.61e-02
+  nu=0.0509 (M=2048, cap=1.14e+04): S=30     t=4.187 1/lam=0.8274 | S=100    t=5.022 1/lam=0.7117 | S=300    t=5.752 1/lam=0.6142 | S=1000   t=6.438 1/lam=0.5333 | S=3000   t=7.001 1/lam=0.5036 | S=10000  t=7.673 1/lam=0.7324
+      1/lam fit on S in [379, 1.14e+04] (5210 pts): slope=0.1788 -> p_hat=-5.592, root t0_hat=3.8895, rms=7.77e-02
+  nu=0.0510 (M=2048, cap=6.75e+03): S=30     t=4.195 1/lam=0.8359 | S=100    t=5.050 1/lam=0.7236 | S=300    t=5.792 1/lam=0.6340 | S=1000   t=6.511 1/lam=0.5695 | S=3000   t=7.136 1/lam=0.5915
+      1/lam fit on S in [225, 6.75e+03] (3474 pts): slope=0.1909 -> p_hat=-5.237, root t0_hat=3.5809, rms=8.74e-02
+  nu=0.0512 (M=1024, cap=3.18e+03): S=30     t=4.247 1/lam=0.8484 | S=100    t=5.093 1/lam=0.7506 | S=300    t=5.878 1/lam=0.6784 | S=1000   t=6.676 1/lam=0.6659 | S=3000   t=7.525 1/lam=1.0804
+      1/lam fit on S in [106, 3.18e+03] (1931 pts): slope=0.2103 -> p_hat=-4.755, root t0_hat=3.1080, rms=1.03e-01
+  nu=0.0516 (M=1024, cap=1.21e+03): S=30     t=4.279 1/lam=0.8855 | S=100    t=5.209 1/lam=0.8099 | S=300    t=6.079 1/lam=0.7954 | S=1000   t=7.146 1/lam=1.1435
+      1/lam fit on S in [40.4, 1.21e+03] (902 pts): slope=0.2404 -> p_hat=-4.159, root t0_hat=2.4823, rms=1.28e-01
+  nu=0.0522 (M=1024, cap=496): S=30     t=4.327 1/lam=0.9453 | S=100    t=5.379 1/lam=0.9251 | S=300    t=6.467 1/lam=1.1257
+      1/lam fit on S in [16.5, 496] (429 pts): slope=0.3237 -> p_hat=-3.090, root t0_hat=2.5881, rms=1.38e-01
+  nu=0.0530 (M=1024, cap=230): S=30     t=4.434 1/lam=1.0341 | S=100    t=5.668 1/lam=1.1594
+      1/lam fit on S in [7.68, 230] (217 pts): slope=0.4498 -> p_hat=-2.223, root t0_hat=2.8669, rms=1.36e-01
+  nu=0.0540 (M=1024, cap=120): S=30     t=4.565 1/lam=1.1706 | S=100    t=6.204 1/lam=1.8544
+      1/lam fit on S in [4.01, 120] (114 pts): slope=0.6072 -> p_hat=-1.647, root t0_hat=3.0721, rms=1.21e-01
+  separations (same instrument; kappa if linear):
+   pair (0.0506,0.0507) [2177 pts, sep/S1 0.011..0.295]: late 1/lam slope=-0.0964 -> kappa_hat=10.376, t0_hat=9.2689
+   pair (0.0507,0.0508) [2377 pts, sep/S1 0.011..0.297]: late 1/lam slope=-0.0359 -> kappa_hat=27.829, t0_hat=14.1903
+   pair (0.0509,0.0510) [2867 pts, sep/S1 0.011..0.297]: late 1/lam slope=0.2563 -> kappa_hat=-3.902, t0_hat=5.8726
+   pair (0.0510,0.0512) [921 pts, sep/S1 0.021..0.300]: late 1/lam slope=0.0437 -> kappa_hat=-22.893, t0_hat=-2.1550
+stage fam: profile family classification (tails, anchors, rational-family fit)
+  control: c(1) = 0.25000000 (exact 1/4), c(2) = 0.10546875 (exact 27/256 = 0.10546875)
+  a=0.00: sup-snapshot A=20 L=0.01282 zcap=12.0 | beta_L=nan 1/beta=inf | tau=0.796 (in 0.697 / out 0.917, 181 pts) | d(W0)=3.41e-04 d(W12)=3.44e-01 | best q=1.001 resid=1.85e-04 (tau_q=1.00)
+  a=0.20: sup-snapshot A=100 L=0.009427 zcap=12.0 | beta_L=0.762 1/beta=1.31 | tau=1.080 (in 0.947 / out 1.241, 181 pts) | d(W0)=1.16e-01 d(W12)=2.33e-01 | best q=1.194 resid=1.74e-03 (tau_q=1.39)
+  a=0.50: sup-snapshot A=3054 L=0.02446 zcap=12.0 | beta_L=0.343 1/beta=2.91 | tau=2.176 (in 1.829 / out 2.617, 181 pts) | d(W0)=3.45e-01 d(W12)=1.06e-05 | best q=2.000 resid=8.03e-06 (tau_q=3.00)
+  a=0.60: sup-snapshot A=1004 L=0.1058 zcap=9.5 | beta_L=0.204 1/beta=4.89 | tau=2.958 (in 2.296 / out 3.851, 130 pts) | d(W0)=4.40e-01 d(W12)=1.04e-01 | best q=2.851 resid=3.67e-03 (tau_q=4.70)
+  a=0.70: sup-snapshot A=300.2 L=0.314 zcap=3.2 | beta_L=0.075 1/beta=13.33 | tau=nan (in nan / out nan, 0 pts) | d(W0)=5.49e-01 d(W12)=2.28e-01 | best q=5.065 resid=1.01e-03 (tau_q=9.13)
+  freeze-out test  tau * beta_L  (should be 1 where scales separate):
+   a=0.20: tau*beta = 0.823   (q-family: (2q-1)*beta = 1.056)
+   a=0.50: tau*beta = 0.747   (q-family: (2q-1)*beta = 1.030)
+   a=0.60: tau*beta = 0.604   (q-family: (2q-1)*beta = 0.961)
+stage mode: nu=0.0506 M=1024 � pole-structure discriminator
+  t=4.954 S=100.1 m_hi=224: sigma=0.985 (halves 0.979/0.994)  r=0.92452  rms=0.002
+  t=5.634 S=300.1 m_hi=391: sigma=0.992 (halves 0.989/0.996)  r=0.95589  rms=0.001
+  t=6.244 S=1000 m_hi=716: sigma=0.996 (halves 0.995/0.997)  r=0.97564  rms=0.001
+  t=6.692 S=3000 m_hi=1024: sigma=0.998 (halves 0.997/0.999)  r=0.98587  rms=0.001
+  t=6.954 S=6500 m_hi=1024: sigma=0.998 (halves 0.998/1.000)  r=0.99038  rms=0.000
+  [prediction: double pole sigma->1, simple pole sigma->0]
+[67 s]
+stage tstar: blowup-side locus (nu* = 0.05057)
+  nu=0.049600 (M=1024, cap=7.19e+03): S=100    t=4.741 1/lam=0.5861 | S=1000   t=5.766 1/lam=0.3135
+      top-stretch 1/lam: slope=-0.3318 -> p'=3.014, root T*=6.6959; bar crossings t(1e3)=5.7675 t(1e4)=6.2619 t(cap)=6.2142
+  nu=0.050000 (M=1024, cap=7.19e+03): S=100    t=4.831 1/lam=0.6171 | S=1000   t=5.935 1/lam=0.3552
+      top-stretch 1/lam: slope=-0.2976 -> p'=3.360, root T*=7.1108; bar crossings t(1e3)=5.9358 t(1e4)=6.5172 t(cap)=6.4589
+  nu=0.050200 (M=1024, cap=7.19e+03): S=100    t=4.871 1/lam=0.6358 | S=1000   t=6.029 1/lam=0.3814
+      top-stretch 1/lam: slope=-0.2734 -> p'=3.658, root T*=7.4070; bar crossings t(1e3)=6.0291 t(1e4)=6.6721 t(cap)=6.6056
+  nu=0.050400 (M=2048, cap=2.88e+04): S=100    t=4.911 1/lam=0.6558 | S=1000   t=6.131 1/lam=0.4132 | S=10000  t=6.855 1/lam=0.2255 | S=25000  t=7.034 1/lam=0.1692
+      top-stretch 1/lam: slope=-0.2807 -> p'=3.563, root T*=7.6491; bar crossings t(1e3)=6.1322 t(1e4)=6.8545 t(cap)=7.0577
+  locus fit T*(nu) linear: slope=1198.7  T*(nu*)=7.8390   [decay side: slope -161, t0=8.2104]
+  locus fit t(bar 1e+03) linear: slope=452.8  at nu*: 6.2016
+  locus fit t(bar 1e+04) linear: slope=731.9  at nu*: 6.9570
+stage pole: residue law and rate law tests (nu=0.0506, 12nu = 0.6072)
+  t=4.954 S=100.1  : C=0.6072 (C/12nu=1.000)  D=0.1417  delta=0.07860  rms=0.000
+  t=5.634 S=300.1  : C=0.6072 (C/12nu=1.000)  D=0.0966  delta=0.04515  rms=0.000
+  t=6.244 S=1000   : C=0.6072 (C/12nu=1.000)  D=0.0655  delta=0.02467  rms=0.000
+  t=6.692 S=3000   : C=0.6072 (C/12nu=1.000)  D=0.0462  delta=0.01423  rms=0.000
+  t=6.954 S=6500   : C=0.6072 (C/12nu=1.000)  D=0.0363  delta=0.00967  rms=0.000
+  rate law delta_dot = -(5/12) D:
+   t=4.95..5.63: delta_dot(FD) = -0.04924   -(5/12)D = -0.04963   ratio = 0.992
+   t=5.63..6.24: delta_dot(FD) = -0.03358   -(5/12)D = -0.03376   ratio = 0.995
+   t=6.24..6.69: delta_dot(FD) = -0.02330   -(5/12)D = -0.02327   ratio = 1.001
+   t=6.69..6.95: delta_dot(FD) = -0.01740   -(5/12)D = -0.01720   ratio = 1.012
+      top-stretch 1/lam: slope=-0.3318 -> p'=3.014, root T*=6.6959; bar crossings t(1e3)=5.7675 t(1e4)=6.2619 t(cap)=6.2142
+  nu=0.050000 (M=1024, cap=7.19e+03): S=100    t=4.831 1/lam=0.6171 | S=1000   t=5.935 1/lam=0.3552
+      top-stretch 1/lam: slope=-0.2976 -> p'=3.360, root T*=7.1108; bar crossings t(1e3)=5.9358 t(1e4)=6.5172 t(cap)=6.4589
+  nu=0.050200 (M=1024, cap=7.19e+03): S=100    t=4.871 1/lam=0.6358 | S=1000   t=6.029 1/lam=0.3814
+      top-stretch 1/lam: slope=-0.2734 -> p'=3.658, root T*=7.4070; bar crossings t(1e3)=6.0291 t(1e4)=6.6721 t(cap)=6.6056
+  nu=0.050400 (M=2048, cap=2.88e+04): S=100    t=4.911 1/lam=0.6558 | S=1000   t=6.131 1/lam=0.4132 | S=10000  t=6.855 1/lam=0.2255 | S=25000  t=7.034 1/lam=0.1692
+      top-stretch 1/lam: slope=-0.2807 -> p'=3.563, root T*=7.6491; bar crossings t(1e3)=6.1322 t(1e4)=6.8545 t(cap)=7.0577
+  nu=0.050500 (M=2048, cap=2.88e+04): S=100    t=4.925 1/lam=0.6674 | S=1000   t=6.186 1/lam=0.4317 | S=10000  t=6.962 1/lam=0.2519 | S=25000  t=7.167 1/lam=0.1971
+      top-stretch 1/lam: slope=-0.2468 -> p'=4.052, root T*=7.9745; bar crossings t(1e3)=6.1871 t(1e4)=6.9616 t(cap)=7.1937
+  locus fit T*(nu) linear: slope=1353.0  T*(nu*)=7.9492   [decay side: slope -161, t0=8.2104]
+  locus fit t(bar 1e+03) linear: slope=464.9  at nu*: 6.2103
+  locus fit t(bar 1e+04) linear: slope=771.2  at nu*: 6.9851
+stage mode: nu=0.0506 M=1024 � pole-structure discriminator
+  t=4.954 S=100.1 m_hi=224: sigma=0.985 (halves 0.979/0.994)  r=0.92452  rms=0.002
+  t=5.634 S=300.1 m_hi=391: sigma=0.992 (halves 0.989/0.996)  r=0.95589  rms=0.001
+  t=6.244 S=1000 m_hi=716: sigma=0.996 (halves 0.995/0.997)  r=0.97564  rms=0.001
+  t=6.692 S=3000 m_hi=1024: sigma=0.998 (halves 0.997/0.999)  r=0.98587  rms=0.001
+  t=6.954 S=6500 m_hi=1024: sigma=0.998 (halves 0.998/1.000)  r=0.99038  rms=0.000
+  t=7.199 S=1.5e+04 m_hi=1024: sigma=0.999 (halves 0.998/1.000)  r=0.99370  rms=0.000
+  t=7.461 S=4e+04 m_hi=1024: sigma=0.999 (halves 0.999/1.000)  r=0.99633  rms=0.000
+  t=7.694 S=9e+04 m_hi=1024: sigma=0.999 (halves 0.999/1.000)  r=0.99796  rms=0.000
+  [prediction: double pole sigma->1, simple pole sigma->0]
+[647 s]
+stage pole: residue law and rate law tests (nu=0.0506, 12nu = 0.6072)
+  t=4.954 S=100.1  : C=0.6072 (C/12nu=1.000)  D=0.1417  delta=0.07860  rms=0.000
+  t=5.634 S=300.1  : C=0.6072 (C/12nu=1.000)  D=0.0966  delta=0.04515  rms=0.000
+  t=6.244 S=1000   : C=0.6072 (C/12nu=1.000)  D=0.0655  delta=0.02467  rms=0.000
+  t=6.692 S=3000   : C=0.6072 (C/12nu=1.000)  D=0.0462  delta=0.01423  rms=0.000
+  t=6.954 S=6500   : C=0.6072 (C/12nu=1.000)  D=0.0363  delta=0.00967  rms=0.000
+  t=7.199 S=1.5e+04: C=0.6072 (C/12nu=1.000)  D=0.0279  delta=0.00633  rms=0.000
+  t=7.461 S=4e+04  : C=0.6072 (C/12nu=1.000)  D=0.0197  delta=0.00368  rms=0.000
+  t=7.694 S=9e+04  : C=0.6072 (C/12nu=1.000)  D=0.0129  delta=0.00204  rms=0.000
+  rate law delta_dot = -(5/12) D:
+   t=4.95..5.63: delta_dot(FD) = -0.04924   -(5/12)D = -0.04963   ratio = 0.992
+   t=5.63..6.24: delta_dot(FD) = -0.03358   -(5/12)D = -0.03376   ratio = 0.995
+   t=6.24..6.69: delta_dot(FD) = -0.02330   -(5/12)D = -0.02327   ratio = 1.001
+   t=6.69..6.95: delta_dot(FD) = -0.01740   -(5/12)D = -0.01720   ratio = 1.012
+   t=6.95..7.20: delta_dot(FD) = -0.01362   -(5/12)D = -0.01339   ratio = 1.017
+   t=7.20..7.46: delta_dot(FD) = -0.01015   -(5/12)D = -0.00993   ratio = 1.022
+   t=7.46..7.69: delta_dot(FD) = -0.00701   -(5/12)D = -0.00680   ratio = 1.031

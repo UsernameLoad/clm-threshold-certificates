@@ -1,0 +1,157 @@
+======== gclm_scan.py — run record ========
+python 3.13.14 | numpy 2.5.2 | scipy 1.18.1
+stage u: unit tests
+U1  |rhs_g(w,a=0) - rhs_CLM(w)|_inf          : 0.000e+00
+U2  |mean(rhs_g)|, a=+0.7                    : 5.285e-19
+U2  |mean(rhs_g)|, a=+1.0                    : 2.711e-19
+U2  |mean(rhs_g)|, a=-0.5                    : 6.776e-20
+U3  sup|rhs_g(-sin x, a=1)|                  : 1.270e-14
+U4  hierarchy vs FFT rhs (modes<=20), a=+0.0 : 3.351e-16
+U4  hierarchy vs FFT rhs (modes<=20), a=+0.5 : 5.112e-16
+U4  hierarchy vs FFT rhs (modes<=20), a=+1.0 : 6.678e-16
+U4  hierarchy vs FFT rhs (modes<=20), a=-0.5 : 4.199e-15
+U5  convolution vs FFT Galerkin rhs, a=+0.6  : 8.741e-19
+U5  convolution vs FFT Galerkin rhs, a=+1.0  : 1.388e-18
+U6  sympy hierarchy coefficients m=2..4      : all match
+[0.3 s]
+stage c0: a=0 real-data calibration vs rung-1 exact solution
+    K=341; columns: on-grid err | pred floor (t/2)^K
+    t=0.50  1.932e-14  4.984e-206
+    t=1.00  2.665e-14  2.232e-103
+    t=1.50  5.862e-14  2.488e-43
+    t=1.80  1.226e-13  2.493e-16
+    t=1.85  3.500e-11  2.847e-12
+    t=1.90  4.727e-07  2.534e-08
+[13.1 s]
+stage cc: complex triangular hierarchy vs complex pseudospectral, per a
+  a=+0.00:  t=0.2 err=1.11e-15 (|b_48|=2.2e-33) t=0.4 err=1.94e-14 (|b_48|=2.0e-19) t=0.6 err=4.36e-15 (|b_48|=3.7e-11)   [6.5 s]
+  a=+0.25:  t=0.2 err=1.77e-14 (|b_48|=1.4e-40) t=0.4 err=2.44e-15 (|b_48|=2.7e-29) t=0.6 err=4.98e-15 (|b_48|=5.6e-21)   [1.1 s]
+  a=+0.50:  t=0.2 err=5.61e-14 (|b_48|=1.1e-43) t=0.4 err=3.11e-14 (|b_48|=1.0e-33) t=0.6 err=9.75e-13 (|b_48|=8.4e-33)   [1.1 s]
+  a=+0.75:  t=0.2 err=2.61e-14 (|b_48|=2.3e-48) t=0.4 err=1.21e-12 (|b_48|=1.1e-32) t=0.6 err=5.74e-11 (|b_48|=1.9e-28)   [1.1 s]
+  a=+1.00:  t=0.2 err=1.23e-16 (|b_48|=0.0e+00) t=0.4 err=1.21e-16 (|b_48|=0.0e+00) t=0.6 err=1.13e-16 (|b_48|=0.0e+00)   [1.1 s]
+  a=-0.50:  t=0.2 err=1.16e-14 (|b_48|=1.4e-21) t=0.4 err=7.20e-13 (|b_48|=1.9e-07)  [stopped: complex amplitude blowup]   [1.4 s]
+[total 12.4 s]
+stage s1: De Gregorio (a=1) steady state + perturbation decay
+  s1a  drift from -sin x after t=5 (N=256)     : 2.336e-15   (S02: 3.251e-15)
+  s1b  w0=-sin x + 0.1*cos2x: |P_{m>=2}w|_2 6.837e-02 -> 4.503e-02 (t=0->40), mode-1 1.0012 -> 1.6314, late log-slope 0.0056
+  s1b  w0=-sin x + 0.3*sin3x: |P_{m>=2}w|_2 2.267e-01 -> 7.720e-02 (t=0->40), mode-1 0.9679 -> 0.1261, late log-slope 0.0725
+[74.1 s]
+stage a=+0.000  (Tmax=8)
+  t_stop=1.940 (strip collapsed (delta*K<12))  strict_horizon=1.830  sup(t_stop)=1.692e+01
+    t=0.50  (i)vs(ii): 1.621e-13
+    t=1.00  (i)vs(ii): 1.566e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 2.0081 quad 2.0001  (exact T*=2)
+[28.1 s]
+stage a=-0.250  (Tmax=4)
+  t_stop=1.600 (strip collapsed (delta*K<12))  strict_horizon=1.460  sup(t_stop)=6.502e+00
+    t=0.25  (i)vs(ii): 9.126e-14
+    t=0.50  (i)vs(ii): 9.281e-14
+    verdict: BLOWUP (strip collapse) | T_est lin 1.7564 quad 1.7327
+[24.4 s]
+stage a=-0.500  (Tmax=4)
+  t_stop=1.360 (strip collapsed (delta*K<12))  strict_horizon=1.210  sup(t_stop)=4.188e+00
+    t=0.25  (i)vs(ii): 8.105e-14
+    t=0.50  (i)vs(ii): 1.534e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 1.5875 quad 1.5423
+[20.2 s]
+stage a=-1.000  (Tmax=4)
+  t_stop=1.030 (strip collapsed (delta*K<12))  strict_horizon=0.890  sup(t_stop)=2.530e+00
+    t=0.25  (i)vs(ii): 1.232e-13
+    t=0.50  (i)vs(ii): 3.056e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 1.3958 quad 1.2884
+[15.2 s]
+stage a=+0.200  (Tmax=8)
+  t_stop=2.290 (strip collapsed (delta*K<12))  strict_horizon=2.230  sup(t_stop)=6.003e+01
+    t=0.50  (i)vs(ii): 8.301e-13
+    t=1.00  (i)vs(ii): 2.075e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 2.3134 quad 2.3102
+[32.8 s]
+stage a=+0.400  (Tmax=8)
+  t_stop=2.786 (amplitude blowup / nonfinite)  strict_horizon=2.780  sup(t_stop)=1.847e+03
+    t=0.50  (i)vs(ii): 2.358e-12
+    t=1.00  (i)vs(ii): 1.857e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 2.7876 quad 2.7859
+[40.2 s]
+stage a=+0.500  (Tmax=8)
+  t_stop=3.142 (amplitude blowup / nonfinite)  strict_horizon=n/a  sup(t_stop)=1.089e+03
+    t=0.50  (i)vs(ii): 1.042e-12
+    t=1.00  (i)vs(ii): 1.457e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 3.1434 quad 3.1417
+[44.5 s]
+stage a=+0.600  (Tmax=12)
+  t_stop=3.650 (amplitude blowup / nonfinite)  strict_horizon=n/a  sup(t_stop)=8.136e+02
+    t=0.50  (i)vs(ii): 8.560e-14
+    t=1.00  (i)vs(ii): 1.508e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 3.6520 quad 3.6503
+[51.4 s]
+stage a=+0.700  (Tmax=12)
+  t_stop=4.462 (amplitude blowup / nonfinite)  strict_horizon=4.450  sup(t_stop)=6.349e+02
+    t=0.50  (i)vs(ii): 1.254e-11
+    t=1.00  (i)vs(ii): 5.841e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 4.4661 quad 4.4645
+[63.3 s]
+stage a=+0.800  (Tmax=12)
+  t_stop=5.170 (strip collapsed (delta*K<12))  strict_horizon=4.350  sup(t_stop)=4.733e+00
+    t=0.50  (i)vs(ii): 7.883e-14
+    t=1.00  (i)vs(ii): 1.901e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 6.1055 quad 6.0705
+[75.2 s]
+stage a=+0.900  (Tmax=20)
+  t_stop=4.910 (strip collapsed (delta*K<12))  strict_horizon=3.760  sup(t_stop)=1.533e+00
+    t=0.50  (i)vs(ii): 1.779e-13
+    t=1.00  (i)vs(ii): 3.461e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 11.3356 quad 10.5309
+[72.8 s]
+stage a=+0.950  (Tmax=20)
+  t_stop=4.640 (strip collapsed (delta*K<12))  strict_horizon=3.500  sup(t_stop)=1.186e+00
+    t=0.50  (i)vs(ii): 2.353e-13
+    t=1.00  (i)vs(ii): 3.972e-13
+    verdict: BLOWUP (strip collapse) | T_est lin 22.0687 quad 17.6778
+[68.7 s]
+stage a=+1.000  (Tmax=10)
+  t_stop=10.000 (Tmax)  strict_horizon=n/a  sup(t_stop)=1.000e+00
+    t=0.50  (i)vs(ii): 6.384e-16
+    t=1.00  (i)vs(ii): 6.384e-16
+    a=1 consistency: drift of cos x from steadiness at t_stop: 1.014e-12
+    verdict: DECAY (sup decreasing at Tmax) | T_est lin nan quad 21606650.6583
+[140.2 s]
+figure saved: gclm_scan.png
+---- stage pade ----
+a=0.0  ratios c_(m+1)/c_m, m=1..10:
+    +0.000000-0.500000j -0.000000-0.500000j -0.000000-0.500000j +0.000000-0.500000j +0.000000-0.500000j -0.000000-0.500000j -0.000000-0.500000j +0.000000-0.500000j +0.000000-0.500000j -0.000000-0.500000j
+    |ratio| drift over m=1..18: 2.14e-10
+a=0.5  ratios c_(m+1)/c_m, m=1..10:
+    +0.000000-0.256886j -0.000000-0.192664j -0.000000-0.171257j +0.000000-0.160553j +0.000000-0.154131j -0.000000-0.149850j -0.000000-0.146792j +0.000000-0.144498j +0.000000-0.142714j -0.000000-0.141287j
+    |ratio| drift over m=1..18: 1.22e-01
+a=0.7  ratios c_(m+1)/c_m, m=1..10:
+    +0.000000-0.150988j -0.000000-0.063638j -0.000000-0.063958j +0.000000-0.021898j +0.000000-0.213559j -0.000000+0.099993j +0.000000+0.216716j +0.000000+0.187768j -0.000000+0.200230j -0.000000+0.203987j
+    |ratio| drift over m=1..18: 2.02e-01
+---- stage rate ----
+  window 0.50: gamma=0.97897  C=1.88162
+  window 0.20: gamma=0.98916  C=1.82501
+  window 0.10: gamma=0.99313  C=1.79796
+  window 0.05: gamma=0.99550  C=1.77941
+  window 0.02: gamma=0.99730  C=1.76343
+  sup*(pi-t): 1.88279 (at pi-0.5) -> 1.73357 (at pi-0.001); sqrt(3)=1.73205 [unconverged]
+---- stage osw ----
+  a=0p8: deltaK 30.0->12.0 over t=[4.35,5.17] | lin rms 6.46e-04 (zero at t=5.81) | exp rms 2.94e-04 (rate -1.191) | exp/lin 0.46
+  a=0p9: deltaK 31.2->12.0 over t=[3.76,4.91] | lin rms 7.27e-04 (zero at t=5.92) | exp rms 4.56e-04 (rate -0.767) | exp/lin 0.63
+  a=0p95: deltaK 30.7->12.0 over t=[3.50,4.64] | lin rms 7.85e-04 (zero at t=5.69) | exp rms 5.29e-04 (rate -0.743) | exp/lin 0.67
+  window 0.50: gamma=0.97897  C=1.88162
+  window 0.20: gamma=0.98916  C=1.82501
+  window 0.10: gamma=0.99313  C=1.79796
+  window 0.05: gamma=0.99550  C=1.77941
+  window 0.02: gamma=0.99730  C=1.76343
+  sup*(pi-t): 1.88279 (at pi-0.5) -> 1.73357 (at pi-0.001); sqrt(3)=1.73205 [unconverged]
+---- stage osw (repaired, incl. N=2048 probe) ----
+  a=a0p8: deltaK 30.0->12.0 over t=[4.35,5.17] | lin rms 6.46e-04 (zero at t=5.81) | exp rms 2.94e-04 (rate -1.191) | exp/lin 0.46
+  a=a0p9: deltaK 31.2->12.0 over t=[3.76,4.91] | lin rms 7.27e-04 (zero at t=5.92) | exp rms 4.56e-04 (rate -0.767) | exp/lin 0.63
+  a=a0p95: deltaK 30.7->12.0 over t=[3.50,4.64] | lin rms 7.85e-04 (zero at t=5.69) | exp rms 5.29e-04 (rate -0.743) | exp/lin 0.67
+  a=n2_a0p9: deltaK 28.7->12.0 over t=[4.58,5.55] | lin rms 4.19e-04 (zero at t=6.45) | exp rms 2.86e-04 (rate -0.872) | exp/lin 0.68
+---- stage rate (repaired standalone) ----
+  window 0.50: gamma=0.97897  C=1.88162
+  window 0.20: gamma=0.98916  C=1.82501
+  window 0.10: gamma=0.99313  C=1.79796
+  window 0.05: gamma=0.99550  C=1.77941
+  window 0.02: gamma=0.99730  C=1.76343
+  sup*(pi-t): 1.88279 (at pi-0.5) -> 1.73357 (at pi-0.001); sqrt(3)=1.73205 [unconverged]

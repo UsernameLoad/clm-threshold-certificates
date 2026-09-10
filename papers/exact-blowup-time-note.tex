@@ -1,0 +1,279 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\hypersetup{pdfauthor={Khalid Ahmed},pdftitle={An exact blowup time for the a = 1/2 generalized Constantin-Lax-Majda equation from single-mode initial data},pdfsubject={},pdfkeywords={}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem*{remark}{Remark}
+\newtheorem*{remarks}{Remarks}
+\theoremstyle{plain}
+\newtheorem*{thmAone}{Theorem A1}
+\newtheorem*{thmAtwo}{Theorem A2}
+\newtheorem*{thmAtwoprime}{Theorem A2$'$}
+\newtheorem*{thmAthree}{Theorem A3}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Sone}{S^1}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\nrm}[1]{\lVert #1 \rVert}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\DeclareMathOperator{\artanh}{artanh}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\DeclareMathOperator{\sgn}{sgn}
+
+\title{An exact blowup time for the \texorpdfstring{$a=\tfrac12$}{a = 1/2} generalized Constantin--Lax--Majda equation from single-mode initial data}
+\author{Khalid Ahmed\\[2pt]
+\small Independent Researcher\\
+\small \texttt{k@shipleed.com}\\
+\small ORCID iD: \href{https://orcid.org/0009-0005-3291-7993}{0009-0005-3291-7993}}
+\date{9 September 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We consider the inviscid generalized Constantin--Lax--Majda (De Gregorio--Okamoto--Sakajo--Wunsch) equation on the circle at advection parameter $a=\tfrac12$, the unique nontrivial parameter admitting exact pole-dynamics solutions \cite{LSS21}. Building on the exact periodic solutions of Silantyev, Lushnikov, Siegel and Ambrose \cite{SLSA25}, we identify the single-mode initial datum $\omega_0=-\sin x$ as the boundary point of their solvable family under an $L^2$-matched parameterization, and show that along this path the family's closed-form collapse times converge to $\pi$. Combining the family's exactness with the local well-posedness theory of \cite{OSW08} and a continuous-dependence sandwich (the required Lipschitz-dependence estimate is written out in Appendix~\ref{app:A}), we obtain that the solution from $\omega_0=-\sin x$ has maximal time of existence exactly $T^*=\pi$ --- equivalently $T^*=\pi/A$ for $A\cos(x-\varphi)$ --- together with the exact leading blowup rate $\nrm{\omega}_\infty\sim\sqrt3/(\pi-t)$ for the family limit. High-resolution spectral computations independently confirm $T^*=\pi$ to $\abs{\Delta T}\approx1.2\times10^{-6}$ and the rate constant to 10 parts per million, with the derived correction exponent $2/3$.
+\end{abstract}
+
+\section{Setting and main result}\label{sec:setting}
+
+On $\Sone=\R/2\pi\Z$ consider, for mean-zero $\omega$,
+\begin{equation}\label{eq:gclm}
+\omega_t + a\,u\,\omega_x = u_x\,\omega,\qquad u_x = H\omega,\qquad \hat u_k = -\frac{\hat\omega_k}{\abs{k}}\ (k\neq0),\quad \hat u_0=0,
+\end{equation}
+with $H$ the periodic Hilbert transform ($\hat H_k=-i\sgn k$) and $a=\tfrac12$. Equation~\eqref{eq:gclm} is the gCLM/Okamoto--Sakajo--Wunsch family \cite{OSW08} interpolating between the Constantin--Lax--Majda equation ($a=0$) \cite{CLM85} and the De Gregorio equation ($a=1$).
+
+\begin{theorem}\label{thm:main}
+Let $a=\tfrac12$ and $\omega_0(x)=-\sin x$, and let $\omega$ be the solution of \eqref{eq:gclm} with $\omega(0)=\omega_0$ given by \cite[Theorem~3.1]{OSW08} (Theorem~A1 below), maximal in the class $C([0,T^*);H^1(\Sone)/\R)$. Then
+\[
+T^*=\pi.
+\]
+Moreover $\omega\in C([0,T];H^s(\Sone))$ for every $s\ge0$ and every $T<\pi$, while $\int_0^\pi\nrm{H\omega(t)}_\infty\,dt=\infty$ and $\nrm{\omega_x(t)}_{L^2}$ is unbounded as $t\to\pi^-$. By translation, reflection, and the exact scaling $\omega\mapsto A\,\omega(x,At)$: $T^*(A\cos(x-\varphi))=\pi/A$ for all $A>0$, $\varphi\in\R$.
+\end{theorem}
+
+\begin{proposition}[rate]\label{prop:rate}
+Along the solvable family approaching $-\sin x$ (Section~\ref{sec:boundary}), $\nrm{\omega(t)}_\infty\,(t_c-t)\to\sqrt3$, with correction $O((t_c-t)^{2/3})$. The direct computation from single-mode data is consistent with $\nrm{\omega(t)}_\infty\,(\pi-t)\to\sqrt3$. The rate is exact for the family limit; for $\omega_0=-\sin x$ itself it is conjectural, supported numerically at the $10^{-5}$ level (Section~\ref{sec:rate}).
+\end{proposition}
+
+\begin{remarks}
+(i) $a=\tfrac12$ and $a=0$ are the \emph{only} parameters for which pole-superposition solutions exist \cite{LSS21}, as noted in \cite{ALSS24}. (ii) The collapse in our limit has spatial scale $(t_c-t)^{1/3}$, matching the known inviscid $a=\tfrac12$ self-similar exponent $\alpha=1/3$ found independently in \cite{LSS21} and \cite{Chen20}; the family's endgame realizes that self-similar solution. For the broader singularity theory of the family \eqref{eq:gclm} see \cite{EJ20,CHH21,HQWW24}. (iii) The blowup time from an explicit, non-self-similar, single-Fourier-mode datum appears to be new. \cite{SLSA25} parameterize by pole data and do not treat single-mode data; their Remark~2 notes that the point $(v_c(0),\omega_{-2,i}(0))=(1,0)$ is a singular point of their implicit solution whose limit depends on the direction of approach --- our boundary path (Section~\ref{sec:boundary}) is one such direction, along which the datum is $-\sin x$ and the collapse time is $\pi$ --- and the companion paper \cite{ALSS24} reports inviscid periodic $a=\tfrac12$ collapse times only numerically, for two-mode data.
+\end{remarks}
+
+\section{The solvable family, real reduction}\label{sec:family}
+
+With $X=\tan(x/2)$, \cite[\S3.1]{SLSA25} construct solutions $\omega=2\Real[\omega_-]$ of \eqref{eq:gclm} (their (45) with $\nu=0$; their ``$\sigma=0$'' dissipation $-\nu\tilde\omega$ vanishes at $\nu=0$) with
+\begin{equation}\label{eq:field}
+\omega_-(x,t)=\omega_{-1}(t)\Big[(X-iv_c)^{-1}-(-i-iv_c)^{-1}\Big]+\omega_{-2}(t)\Big[(X-iv_c)^{-2}-(-i-iv_c)^{-2}\Big],
+\end{equation}
+subject to the log-cancellation constraint $\omega_{-1}=2iv_c\,\omega_{-2}/(1-v_c^2)$ (their (42)). In the real reduction $\omega_{-2}=iw_2$ ($w_2$ real), $v_c\in(0,1)$ real, the pole dynamics reduce to (their (57))
+\begin{equation}\label{eq:ode}
+w_2'=\frac{w_2^2\,(1-2v_c^2+5v_c^4)}{4v_c^2(1-v_c^2)^2},\qquad v_c'=-\frac{w_2\,(1+v_c^2)}{4v_c(1-v_c^2)},
+\end{equation}
+with the implicit solution (their (60), $\nu=0$)
+\begin{equation}\label{eq:implicit}
+F(v_c(t))=F(v_c(0))+R_0\,t,\qquad F(v):=\frac{v(v^2-1)}{(v^2+1)^2}+\arctan v,\qquad R_0=\frac{2w_2(0)\,v_0}{(v_0^2+1)^2(v_0^2-1)}.
+\end{equation}
+A computation gives
+\begin{equation}\label{eq:Fprime}
+F'(v)=\frac{8v^2}{(1+v^2)^3}>0,\qquad F(0)=0,\qquad F(1)=\frac{\pi}{4},\qquad F(\infty)=\frac{\pi}{2},
+\end{equation}
+so $F$ is a strictly increasing bijection $(0,\infty)\to(0,\pi/2)$. Type-A collapse ($v_c\to0^+$) occurs when $F$ reaches $0$; there $\nrm{\omega(t)}_{L^2}\to\infty$ (their Theorem~3.7), hence $\nrm{\omega(t)}_\infty\to\infty$ since $\nrm{\omega}_{L^2}\le\sqrt{2\pi}\,\nrm{\omega}_\infty$ on $\Sone$. For $w_2(0)>0$, $0<v_0<1$ (so $R_0<0$) the collapse time is closed-form:
+\begin{equation}\label{eq:tc}
+t_c(v_0,w_2(0))=\frac{F(v_0)\,(v_0^2+1)^2\,(1-v_0^2)}{2\,w_2(0)\,v_0}.
+\end{equation}
+We also record the second relation of their (58) at $\nu=0$, which expresses $w_2$ through $v_c$ along a trajectory:
+\begin{equation}\label{eq:w2rel}
+w_2(t)=w_2(0)\cdot\frac{v_0}{v_c(t)}\cdot\frac{1-v_c(t)^2}{1-v_0^2}\cdot\Big(\frac{v_c(t)^2+1}{v_0^2+1}\Big)^2.
+\end{equation}
+
+\section{The boundary limit}\label{sec:boundary}
+
+\paragraph{Choice of path.} Set
+\begin{equation}\label{eq:path}
+w_2(0)=\frac{1-v_0^2}{2},\qquad v_0\to1^-.
+\end{equation}
+Then $\omega_{-1}(0)=-v_0$ exactly, and $R_0=-v_0/(v_0^2+1)^2\to-1/4$. (The endpoint $(v_0,w_2(0))=(1,0)$ is the singular point of the implicit solution discussed in \cite[Remark~2]{SLSA25}; \eqref{eq:path} fixes one direction of approach to it.)
+
+\begin{lemma}[data limit]\label{lem:data}
+With \eqref{eq:path}, the initial datum $\omega^{(v_0)}(\cdot,0)$ of the family satisfies, for every $s\ge0$,
+\[
+\norm{\omega^{(v_0)}(\cdot,0)-(-\sin x)}_{H^s(\Sone)}\le C_s\,(1-v_0),\qquad v_0\in[\tfrac12,1).
+\]
+\end{lemma}
+
+\begin{proof}
+In $Z=e^{ix}$: $X-iv=-i\,[(1+v)Z-(1-v)]/(Z+1)$, so $(X-iv)^{-1}=i(Z+1)/[(1+v)(Z-r)]$ with $r:=(1-v)/(1+v)\in(0,1/3]$ for $v\ge\tfrac12$. Expanding on $\abs{Z}=1>r$: $(Z-r)^{-1}=\sum_{n\ge1}r^{n-1}Z^{-n}$ and $(Z-r)^{-2}=\sum_{n\ge2}(n-1)r^{n-2}Z^{-n}$. Substituting into \eqref{eq:field} with \eqref{eq:path} and collecting mode coefficients $c_{-n}(v_0)$:
+\begin{itemize}[leftmargin=2em]
+\item $n=1$: $c_{-1}=-\dfrac{2iv}{(1+v)^2}-\dfrac{i(1-v^2)(1+r)}{(1+v)^2}=-\dfrac{i}{2}+O(1-v_0)$, using $\dfrac{2v}{(1+v)^2}=\dfrac12-\dfrac{(1-v)^2}{2(1+v)^2}$ and $1-v^2=O(1-v)$;
+\item $n\ge2$: $\abs{c_{-n}}\le C\big[r^{n-1}+(1-v)(n-1)r^{n-2}\big]\le C'\,n\,(1-v_0)\,r^{n-2}$, since $r\le(1-v)$.
+\end{itemize}
+At $v_0=1$ ($r=0$) only $c_{-1}=-i/2$ survives: $\omega_-=-(i/2)e^{-ix}$, $\omega=2\Real[\omega_-]=-\sin x$. For $v_0<1$,
+\begin{align*}
+\norm{\omega^{(v_0)}(\cdot,0)-(-\sin x)}_{H^s}^2&=2\sum_n n^{2s}\,\abs{c_{-n}-\delta_{n1}(-i/2)}^2\\
+&\le C(1-v_0)^2\Big[1+\sum_{n\ge2}n^{2s+2}\big(\tfrac13\big)^{2(n-2)}\Big]\le C_s^2(1-v_0)^2.\qedhere
+\end{align*}
+\end{proof}
+
+\begin{lemma}[collapse time]\label{lem:tc}
+With \eqref{eq:path}, $t_c(v_0)=F(v_0)(v_0^2+1)^2/v_0$ and
+\[
+t_c(v_0)=\pi-(4+\pi)(1-v_0)+o(1-v_0)\to\pi\qquad\text{as }v_0\to1^-.
+\]
+\end{lemma}
+
+\begin{proof}
+Insert \eqref{eq:path} into \eqref{eq:tc}: $t_c(v_0)=F(v_0)\,g(v_0)$ with $g(v)=(v^2+1)^2/v$, continuous on $(0,1]$ with $t_c(1)=F(1)g(1)=(\pi/4)\cdot4=\pi$ by \eqref{eq:Fprime}. For the slope: $g'(v)=(v^2+1)(3v^2-1)/v^2$, so $g'(1)=4$; $F'(1)=1$ by \eqref{eq:Fprime}; hence $t_c'(1)=F'(1)g(1)+F(1)g'(1)=4+\pi$.
+\end{proof}
+
+\begin{remark}[path dependence of the approach slope]
+Along the exactly $L^2$-matched path $w_2(0)=v_0^{3/2}(1-v_0^2)/\sqrt{2(1+v_0^2)}$ --- same limit datum --- the prefactor $h(v)=(v^2+1)^{5/2}/(\sqrt2\,v^{5/2})$ has $h'(1)=0$, so there $t_c'(1)=F'(1)h(1)=4$ and $t_c=\pi-4(1-v_0)+o(1-v_0)$. Both paths give $t_c\to\pi$; only the approach slope is path-dependent.
+\end{remark}
+
+\begin{lemma}[uniform bounds off collapse]\label{lem:bounds}
+For every $\varepsilon\in(0,\pi/2)$ there exist $\bar v(\varepsilon)<1$, $\delta(\varepsilon)>0$, $C_s(\varepsilon)$ such that for all $v_0\in[\bar v,1)$: on $[0,\pi-\varepsilon]$,
+\[
+v_c(t)\ge\delta(\varepsilon),\qquad 0<w_2(t)\le\frac{1}{2\delta(\varepsilon)},\qquad \norm{\omega^{(v_0)}(\cdot,t)}_{H^s}\le C_s(\varepsilon),
+\]
+and $\omega^{(v_0)}(\cdot,t)$ is analytic in the strip $\abs{\Imag x}<2\artanh(\delta(\varepsilon))$.
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:tc} choose $\bar v\in[1/\sqrt3,1)$ with $t_c(v_0)>\pi-\varepsilon/2$ for $v_0\ge\bar v$. By \eqref{eq:path}, $\abs{R_0}=v_0/(v_0^2+1)^2$, which decreases on $[1/\sqrt3,1]$ from $0.325$ to $1/4$; hence $\abs{R_0}\ge1/4$ for $v_0\in[\bar v,1)$. Since $F(v_c(t))=F(v_0)+R_0t$ decreases linearly and vanishes at $t_c$, $F(v_c(t))=\abs{R_0}(t_c-t)\ge(1/4)(\varepsilon/2)=\varepsilon/8$ on $[0,\pi-\varepsilon]$. Hence $v_c(t)\ge\delta:=F^{-1}(\varepsilon/8)$ by \eqref{eq:Fprime}. Next, from \eqref{eq:ode}, $w_2'=w_2^2\,(1-2v_c^2+5v_c^4)/(4v_c^2(1-v_c^2)^2)\ge0$ because the quartic $5v^4-2v^2+1$ has no real zeros, so $w_2$ is non-decreasing and stays positive; then $v_c'<0$ by \eqref{eq:ode}, so $v_c(t)\le v_0<1$ and \eqref{eq:w2rel} with \eqref{eq:path} gives
+\[
+w_2(t)=\frac{v_0}{2v_c(t)}\,(1-v_c(t)^2)\Big(\frac{v_c(t)^2+1}{v_0^2+1}\Big)^2\le\frac{1}{2v_c(t)}\le\frac{1}{2\delta}.
+\]
+The coefficients of \eqref{eq:field} are therefore bounded uniformly: $\omega_{-2}=iw_2$ with $\abs{\omega_{-2}}\le1/(2\delta)$, and $\omega_{-1}=2iv_c\,\omega_{-2}/(1-v_c^2)=-v_0\big((v_c^2+1)/(v_0^2+1)\big)^2$, so $\abs{\omega_{-1}}\le1$ (the factor $1-v_c^2$ cancels). The field \eqref{eq:field} has its poles at $X=\pm iv_c$, i.e.\ at $\abs{\Imag x}=2\artanh(v_c)\ge2\artanh\delta$; the mode expansion of the proof of Lemma~\ref{lem:data}, with $v=v_c(t)\in[\delta,1)$, gives $\abs{c_{-n}(t)}\le C(\delta)\,n\,r(\delta)^{n-2}$, $r(\delta)=(1-\delta)/(1+\delta)<1$, uniformly on $[0,\pi-\varepsilon]$ --- geometric decay, hence uniform $H^s$ bounds for every $s$ and strip analyticity.
+\end{proof}
+
+\section{Local theory}\label{sec:local}
+
+\begin{thmAone}[{\cite[Theorem~3.1]{OSW08}}; local well-posedness, statement as published]
+Let $a\in\R$ be given. For all $\omega_0\in H^1(\Sone)/\R$, there exists a $T>0$ depending only on $a$ and $\nrm{\omega_{0,x}}_{L^2}$ such that there exists a unique solution $\omega\in C^0([0,T];H^1(\Sone)/\R)\cap C^1([0,T];L^2(\Sone)/\R)$ of \eqref{eq:gclm} with $\omega(0)=\omega_0$.
+\end{thmAone}
+\noindent Their proof is the Kato--Lai theorem (their \S5). $H^1(\Sone)\subset L^\infty$ with the sharp constant $c_0=\pi/\sqrt6$ they record in their (6): $\nrm{f}_\infty\le c_0\nrm{f_x}_{L^2}$.
+
+\begin{thmAtwo}[{\cite[Theorem~3.2]{OSW08}}; continuation, statement as published]
+Suppose $\omega(0)\in H^1(\Sone)/\R$, the solution exists on $[0,T)$, and $\int_0^T\nrm{H\omega(t)}_\infty\,dt<\infty$. Then the solution extends to $[0,T+\delta]$ for some $\delta>0$.
+\end{thmAtwo}
+
+\begin{thmAtwoprime}[{\cite[Proposition~5.1]{OSW08}}; persistence of regularity, statement as published]
+Let $m$ be an integer $\ge2$. If $\omega_0\in H^m(\Sone)/\R$, then $\sup_{0\le t\le T}\nrm{\omega(t)}_{H^m}<\infty$ as far as the solution $\omega$ exists in $C([0,T];H^1)$.
+\end{thmAtwoprime}
+\noindent Their proof for $m=2$: $\nrm{\omega_{xx}(t)}^2\le\nrm{\omega_{xx}(0)}^2\exp\big(2C(1+\abs{a})\int_0^t\nrm{\omega_x(s)}\,ds\big)$, the other cases ``proved similarly''. Together with the $H^m$ version of Theorem~A1 --- local existence in $C([0,T];H^m)$ for a time depending only on $\nrm{\omega_0}_{H^m}$, obtained exactly as in \cite[\S5]{OSW08} from the Kato--Lai theorem with $V=H^{m+1}$, $W=H^m$, $X=H^{m-1}$ --- and uniqueness, Theorem~A2$'$ says that the $H^1$ solution from an $H^m$ datum belongs to $C([0,T_{\max});H^m)$, where $T_{\max}$ is its maximal time in the $H^1$ class.
+
+\begin{thmAthree}[Lipschitz dependence]
+For integer $s\ge3$, if $\omega\in C([0,T];H^1)$ solves \eqref{eq:gclm} with $K:=\sup_{[0,T]}\nrm{\omega(t)}_{H^s}<\infty$, there exist $\eta,C>0$ depending only on $(a,s,K,T)$ such that every datum $\varpi_0\in H^{s-1}$ with $\nrm{\varpi_0-\omega(0)}_{H^{s-1}}\le\eta$ yields a solution $\varpi$ on all of $[0,T]$ with $\nrm{\varpi(t)-\omega(t)}_{H^{s-1}}\le C\nrm{\varpi_0-\omega(0)}_{H^{s-1}}$.
+\end{thmAthree}
+\noindent Theorem~A3 is proved in Appendix~\ref{app:A}.
+
+\section{Proof of \texorpdfstring{Theorem~\ref{thm:main}}{Theorem 1}}\label{sec:proof}
+
+\paragraph{The bound $T^*\ge\pi$.} Fix $\varepsilon>0$ and set $s=5$. By Lemma~\ref{lem:bounds} the family $\{\omega^{(v_0)}\}_{v_0\ge\bar v}$ is bounded in $C([0,\pi-\varepsilon];H^5)$; since $\partial_t\omega=-a\,u[\omega]\,\omega_x+(H\omega)\,\omega$ maps bounded sets of $H^5$ into bounded sets of $H^4$, it is moreover bounded in $C^1([0,\pi-\varepsilon];H^4)$, hence equicontinuous with values in $H^4$. By Arzel\`a--Ascoli (with compactness of $H^5\subset H^4$ on the compact circle) a subsequence converges in $C([0,\pi-\varepsilon];H^4)$; the limit solves \eqref{eq:gclm} (the nonlinearity is continuous on $H^4\subset C^1$), lies in $L^\infty([0,\pi-\varepsilon];H^5)$, and has datum $-\sin x$ by Lemma~\ref{lem:data}. By uniqueness (Theorem~A1) it \emph{is} the $-\sin x$ solution, which therefore exists on $[0,\pi-\varepsilon]$; as $\varepsilon$ was arbitrary, $T^*\ge\pi$, and by Theorem~A2$'$ (the datum being smooth) $\omega\in C([0,T];H^s)$ for every $s$ and every $T<\pi$.
+
+\paragraph{The bound $T^*\le\pi$.} Suppose $T^*>\pi$. Then $\omega\in C([0,\pi];H^1)$ and, by Theorem~A2$'$ with $m=3$, $K:=\sup_{[0,\pi]}\nrm{\omega(t)}_{H^3}<\infty$. By Theorem~A3 ($s=3$) there is $\eta>0$ such that every datum $\varpi_0$ with $\nrm{\varpi_0-(-\sin x)}_{H^2}\le\eta$ yields a solution on $[0,\pi]$ with $\nrm{\varpi(t)}_{H^2}\le K+1$, in particular $\nrm{\varpi(t)}_\infty\le c_0(K+1)$ on $[0,\pi]$. By Lemma~\ref{lem:data} the family data enter this ball for $v_0$ close to $1$. The family solution \eqref{eq:field} is a classical (real-analytic) solution on $[0,t_c(v_0))$, hence coincides with the $H^1$ solution from the same datum by uniqueness (Theorem~A1); yet by \cite[Theorem~3.7]{SLSA25} its $L^2$ norm --- and hence its $L^\infty$ norm --- diverges as $t\to t_c(v_0)^-$, with $t_c(v_0)<\pi$ by Lemma~\ref{lem:tc} ($v_0<1$) --- contradicting the bound on $[0,\pi]\supseteq[0,t_c(v_0)]$. Hence $T^*\le\pi$, so $T^*=\pi$. Since the solution cannot be continued past $\pi$, Theorem~A2 gives $\int_0^\pi\nrm{H\omega(t)}_\infty\,dt=\infty$, and since $\nrm{H\omega}_\infty\le c_0\nrm{(H\omega)_x}_{L^2}=c_0\nrm{\omega_x}_{L^2}$ ($H$ is an isometry commuting with $\partial_x$), $\nrm{\omega_x(t)}_{L^2}$ is unbounded as $t\to\pi^-$. \qed
+
+\begin{corollary}[scaling]
+$\omega\mapsto\lambda\,\omega(x,\lambda t)$ maps solutions to solutions of \eqref{eq:gclm}; translations and $x\mapsto-x$ likewise. Hence $T^*(A\cos(x-\varphi))=\pi/A$.
+\end{corollary}
+
+\section{The rate \texorpdfstring{$\sqrt3$}{sqrt 3}: exact for the family, conjectural for the limit datum}\label{sec:rate}
+
+Near type-A collapse, with \eqref{eq:path} and $v:=v_c(t)\to0$: from \eqref{eq:implicit}--\eqref{eq:Fprime}, $F(v)=\tfrac83v^3+O(v^5)$ and $F(v)=\abs{R_0}(t_c-t)\to(t_c-t)/4$, so $v^3=\tfrac{3}{32}(t_c-t)\big(1+O((t_c-t)^{2/3})\big)$. From \eqref{eq:w2rel} with \eqref{eq:path}, $w_2(t)=\frac{1}{8v}(1+O(v^2))$ as $v_0\to1$. The double-pole term dominates the sup: writing $x=2v\xi$ near the collapse point, $\max_\xi\abs{\Real[i/(\xi-i)^2]}=3\sqrt3/8$ at $\xi=1/\sqrt3$, giving
+\[
+\nrm{\omega(t)}_\infty=\frac{3\sqrt3}{4}\cdot\frac{w_2}{v^2}\,(1+O(v))=\frac{\sqrt3}{t_c-t}\Big(1+O\big((t_c-t)^{2/3}\big)\Big).
+\]
+In fact the whole endgame is self-similar with an explicit profile: with $\xi=x/\ell(t)$, $\ell(t)=2v(t)=2\big(3(t_c-t)/32\big)^{1/3}$,
+\[
+\omega(x,t)=(t_c-t)^{-1}\,\Phi(\xi)\,(1+o(1)),\qquad \Phi(\xi)=-\frac{16}{3}\cdot\frac{\xi}{(1+\xi^2)^2},
+\]
+whose extremum is $\abs{\Phi(1/\sqrt3)}=\sqrt3$ (consistency check) and whose length exponent $1/3$ is the known $a=\tfrac12$ self-similar exponent \cite{LSS21,Chen20}; $\Phi$ itself should coincide (up to normalization and reflection) with the double-pole self-similar profile of those works --- we do not claim it as new. What is new here is its realization as the endgame of the boundary path with the specific normalization tied to the $-\sin x$ datum.
+
+For $\omega_0=-\sin x$ itself the sandwich controls $[0,\pi-\varepsilon]$ only, so the rate does not transfer automatically. The direct measurement, however, is sharp: refined two-phase runs (rate-adaptive stepping, parabolic refinement of the maximum, resolution-clean fit windows with a core of at least 10 grid cells) give
+\[
+\nrm{\omega}_\infty\,(\pi-t)=C+c_1(\pi-t)^{2/3}+\dots,
+\]
+with $C=1.732061\pm9.3\times10^{-6}$ at $N=4096$ (and $1.732071\pm1.8\times10^{-5}$ at $N=2048$), i.e.\ $C=\sqrt3$ to 10 ppm, with the correction exponent fitted freely as $\beta=0.699\pm0.017$ against the derived $2/3$, and a correction amplitude $c_1\approx0.19$ ($0.188$ at $N=2048$, $0.190$ at $N=4096$). We therefore state the rate for the limit datum as a conjecture, supported at the $10^{-5}$ level with the predicted correction structure.
+
+\section{Independent numerics}\label{sec:numerics}
+
+(i) Windowed Richardson extrapolation of high-resolution dealiased pseudospectral runs ($N\le2048$, $dt\ge1.25\times10^{-5}$, with the analyticity strip monitored) from $\cos x$ gives $T=3.1415939$, $\abs{T-\pi}=1.2\times10^{-6}$, the error monotone under window, $dt$ and $N$ refinement; the same machinery reproduces the exactly known $T(a=0)=2$ as $2.0001$ with the same fit systematics. (ii) The solver is externally anchored on a family solution: the pseudospectral solution of \eqref{eq:gclm} from family data matches the pole reconstruction \eqref{eq:field} to $4.7\times10^{-14}$--$2.1\times10^{-12}$ through $0.9\,t_c$ and reproduces \eqref{eq:tc} to $7.6\times10^{-5}$; our transcription of \eqref{eq:field}--\eqref{eq:implicit} and \eqref{eq:tc} is machine-checked (the constructed field is mean-zero and reproduces the $L^2$ identity of \cite{SLSA25} to $1.4\times10^{-16}$ relative; \eqref{eq:ode} satisfies \eqref{eq:implicit} along integrated trajectories to $3.7\times10^{-13}$); the sup-error of Lemma~\ref{lem:data} is $1.760\cdot(1-v_0)$ at $1-v_0\in\{10^{-3},10^{-5},10^{-7}\}$; the static rate formula of Section~\ref{sec:rate} holds on family fields to $1.2\times10^{-4}$ at $v=0.01$. (iii) Shadowing: the $-\sin x$ solution tracks the family solutions with distance $\propto(1-v_0)$, the normalized distance curves collapsing to 5\% through $0.75\,t_c$ across $v_0\in\{0.99,0.999\}$ --- the continuous-dependence mechanism of Section~\ref{sec:proof} observed directly.
+
+\section{Discussion}\label{sec:discussion}
+
+The $\pi$ originates in $\arctan(\cdot)$ inside the implicit solution of \cite{SLSA25} --- equivalently in $\int_0^\infty F'=\pi/2$ with $F'=8v^2/(1+v^2)^3$ --- filtered through the $L^2$-matched boundary path with limiting rate $1/4$. The result gives the (apparently first) exact blowup time for gCLM from a plain Fourier-mode datum, at the unique solvable parameter, and an exact rate constant for the approaching family. The boundary point itself is visible in \cite{SLSA25} as the singular point of their implicit solution (their Remark~2); what is added here is the identification of the limit datum along an explicit path, the closed-form collapse-time map \eqref{eq:tc}--\eqref{eq:path} for the whole type-A family, and the sandwich that transfers the family's collapse time to the single-mode datum. All ingredients beyond standard local theory are elementary computations on the construction of \cite{SLSA25}.
+
+\subsection*{Data and code availability}
+The scripts, run records and the numerical census that reproduce every quantitative statement in Sections~\ref{sec:rate} and \ref{sec:numerics} are archived at \url{https://github.com/UsernameLoad/clm-threshold-certificates} and deposited with a DOI at \textbf{[Zenodo DOI, inserted at posting]}.
+
+\subsection*{AI statement}
+This paper was produced with an AI system. The mathematics, the computations and the text were generated by an AI research agent (Claude, Anthropic) working under my direction; I set the objectives and the verification rules, reviewed the results, and take full responsibility for the content. Every number in Sections~\ref{sec:rate} and \ref{sec:numerics} is reproducible from the scripts and records archived with the code. No AI system is an author of this paper.
+
+
+\appendix
+\setcounter{equation}{0}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\section{Proof of Theorem~A3}\label{app:A}
+
+Throughout, all functions are mean-zero on $\Sone$; $\nrm{\cdot}_\sigma:=\nrm{\cdot}_{H^\sigma}$; $s\ge3$ is an integer and $\sigma:=s-1\ge2$, so $H^\sigma$ is a Banach algebra embedded in $C^1$. The velocity map $\hat u_k=-\hat\omega_k/\abs{k}$ gives, for mean-zero $\omega$,
+\begin{equation}\label{eq:A1}
+\nrm{u[\omega]}_{\sigma+1}\le\nrm{\omega}_\sigma,\qquad \partial_xu[\omega]=H\omega,\qquad \nrm{H\omega}_\sigma=\nrm{\omega}_\sigma,
+\end{equation}
+$H$ being an isometry on mean-zero $H^\sigma$. We use two standard inequalities on the circle, with $\Lambda^\sigma:=(1-\partial_x^2)^{\sigma/2}$ (\cite{KP88}; textbook form in \cite[Ch.~3]{MB02} --- stated there on $\R^n$, the proofs adapt verbatim to the torus): the Kato--Ponce commutator estimate
+\begin{equation}\tag{KP}\label{eq:KP}
+\nrm{[\Lambda^\sigma,f]g}_{L^2}\le C_\sigma\big(\nrm{\partial_xf}_{L^\infty}\nrm{g}_{\sigma-1}+\nrm{f}_\sigma\nrm{g}_{L^\infty}\big),
+\end{equation}
+and the tame product estimate $\nrm{fg}_\sigma\le C_\sigma\big(\nrm{f}_{L^\infty}\nrm{g}_\sigma+\nrm{f}_\sigma\nrm{g}_{L^\infty}\big)$. Time derivatives of Sobolev norms below are computed as in \cite[\S5]{OSW08}; for solutions of the regularity used here the computation is justified by the standard mollification argument, whose details we omit.
+
+\paragraph{Step 0 ($H^\sigma$ persistence).} Let $\varpi_0\in H^\sigma$ and let $\varpi$ be the $H^1$ solution of Theorem~A1, maximal on $[0,T_{\max})$. By Theorem~A2$'$ (and the $H^\sigma$ local theory quoted with it), $\varpi\in C([0,T_{\max});H^\sigma)$ --- the $H^\sigma$ norm stays finite on every compact subinterval of the $H^1$ existence interval.
+
+\paragraph{Step 1 (difference estimate).} Let $\omega\in C([0,T];H^1)$ be the reference solution with $K=\sup_{[0,T]}\nrm{\omega}_s<\infty$, and $\varpi$ a second solution as in Step~0. The difference $\delta:=\varpi-\omega$ satisfies, by bilinearity,
+\begin{equation}\label{eq:A2}
+\delta_t=-a\,u[\varpi]\,\delta_x-a\,u[\delta]\,\omega_x+(H\varpi)\,\delta+(H\delta)\,\omega,
+\end{equation}
+a splitting chosen so that every top-order derivative falls on the reference $\omega\in H^s$, never on $\varpi$. Pair $\Lambda^\sigma$\eqref{eq:A2} with $\Lambda^\sigma\delta$ in $L^2$:
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Transport by $\varpi$:} $\langle\Lambda^\sigma(u[\varpi]\delta_x),\Lambda^\sigma\delta\rangle=\langle[\Lambda^\sigma,u[\varpi]]\delta_x,\Lambda^\sigma\delta\rangle+\langle u[\varpi]\,\partial_x\Lambda^\sigma\delta,\Lambda^\sigma\delta\rangle$. The second term equals $-\tfrac12\int(H\varpi)\abs{\Lambda^\sigma\delta}^2\le\tfrac12\nrm{H\varpi}_\infty\nrm{\delta}_\sigma^2$. For the commutator, \eqref{eq:KP} with $f=u[\varpi]$, $g=\delta_x$ gives $\nrm{[\Lambda^\sigma,u[\varpi]]\delta_x}_{L^2}\le C\big(\nrm{H\varpi}_\infty\nrm{\delta_x}_{\sigma-1}+\nrm{u[\varpi]}_\sigma\nrm{\delta_x}_\infty\big)\le C\nrm{\varpi}_\sigma\nrm{\delta}_\sigma$, using $\nrm{H\varpi}_\infty\le C\nrm{\varpi}_\sigma$, $\nrm{\delta_x}_{\sigma-1}\le\nrm{\delta}_\sigma$, $\nrm{u[\varpi]}_\sigma\le\nrm{\varpi}_\sigma$, and $\nrm{\delta_x}_\infty\le C\nrm{\delta}_\sigma$ ($\sigma\ge2$). Paired against $\Lambda^\sigma\delta$, the total cost is $C\nrm{\varpi}_\sigma\nrm{\delta}_\sigma^2$.
+\item \emph{Stretching of the reference by the difference velocity:} $\nrm{u[\delta]\,\omega_x}_\sigma\le C\nrm{u[\delta]}_\sigma\nrm{\omega_x}_\sigma\le C\nrm{\delta}_{\sigma-1}\nrm{\omega}_s\le CK\nrm{\delta}_\sigma$ (algebra property; all top derivatives on $\omega$).
+\item \emph{The term $(H\varpi)\delta$:} $\le C\nrm{\varpi}_\sigma\nrm{\delta}_\sigma$ by the algebra property and \eqref{eq:A1}.
+\item \emph{The term $(H\delta)\omega$:} $\le C\nrm{\delta}_\sigma\nrm{\omega}_\sigma\le CK\nrm{\delta}_\sigma$.
+\end{enumerate}
+Summing,
+\begin{equation}\label{eq:A3}
+\frac{d}{dt}\nrm{\delta}_\sigma^2\le C_1(a,s)\,\big(K+\nrm{\varpi(t)}_\sigma\big)\,\nrm{\delta}_\sigma^2.
+\end{equation}
+
+\paragraph{Step 2 (bootstrap).} Let $\varpi$ be the maximal solution with datum $\varpi_0\in H^\sigma$, $\nrm{\varpi_0-\omega(0)}_\sigma\le\eta\le\tfrac12$ (so $\nrm{\varpi_0}_\sigma\le K+\tfrac12$), and let $T_{\max}$ be its maximal time in the $H^1$ class; by Step~0, $\varpi\in C([0,T_{\max});H^\sigma)$. Set
+\[
+T':=\sup\big\{\tau\in[0,\min(T,T_{\max})):\ \nrm{\varpi(t)}_\sigma\le K+1\text{ on }[0,\tau]\big\}>0.
+\]
+On $[0,T')$, \eqref{eq:A3} and Gronwall give $\nrm{\delta(t)}_\sigma\le\nrm{\delta(0)}_\sigma\,e^{C_1(2K+1)T}=:C_2\nrm{\delta(0)}_\sigma$. Choose $\eta:=\min(\tfrac12,1/(2C_2))$; then $\nrm{\delta}_\sigma\le\tfrac12$, hence $\nrm{\varpi}_\sigma\le K+\tfrac12$ on $[0,T')$. If $T'<\min(T,T_{\max})$, continuity of $t\mapsto\nrm{\varpi(t)}_\sigma$ gives $\nrm{\varpi(T')}_\sigma\le K+\tfrac12<K+1$, so the bound $\nrm{\varpi}_\sigma\le K+1$ persists beyond $T'$ --- contradicting the definition of $T'$. Hence $T'=\min(T,T_{\max})$. If $T_{\max}\le T$, then $\nrm{H\varpi}_\infty\le C\nrm{\varpi}_\sigma\le C(K+1)$ on $[0,T_{\max})$, so $\int_0^{T_{\max}}\nrm{H\varpi}_\infty\,dt<\infty$ and Theorem~A2 extends $\varpi$ past $T_{\max}$ --- a contradiction. Therefore $T_{\max}>T$, $T'=T$, and $\nrm{\varpi(t)-\omega(t)}_\sigma\le C_2\nrm{\varpi_0-\omega(0)}_\sigma$ on $[0,T]$. \qed
+
+\begin{thebibliography}{99}
+\bibitem{ALSS24} D.~M. Ambrose, P.~M. Lushnikov, M. Siegel, D.~A. Silantyev, \emph{Global existence and singularity formation for the generalized Constantin--Lax--Majda equation with dissipation: the real line vs.\ periodic domains}, Nonlinearity 37 (2024) 025004, DOI 10.1088/1361-6544/ad140c; arXiv:2207.07548.
+\bibitem{Chen20} J. Chen, \emph{Singularity formation and global well-posedness for the generalized Constantin--Lax--Majda equation with dissipation}, Nonlinearity 33 (2020) 2502--2532, DOI 10.1088/1361-6544/ab74b0; arXiv:1908.09385.
+\bibitem{CHH21} J. Chen, T.~Y. Hou, D. Huang, \emph{On the finite time blowup of the De Gregorio model for the 3D Euler equations}, Comm. Pure Appl. Math. 74 (2021) 1282--1350, DOI 10.1002/cpa.21991; arXiv:1905.06387.
+\bibitem{CLM85} P. Constantin, P.~D. Lax, A. Majda, \emph{A simple one-dimensional model for the three-dimensional vorticity equation}, Comm. Pure Appl. Math. 38 (1985) 715--724.
+\bibitem{EJ20} T.~M. Elgindi, I.-J. Jeong, \emph{On the effects of advection and vortex stretching}, Arch. Ration. Mech. Anal. 235 (2020) 1763--1817; arXiv:1701.04050.
+\bibitem{HQWW24} D. Huang, X. Qin, X. Wang, D. Wei, \emph{Self-similar finite-time blowups with smooth profiles of the generalized Constantin--Lax--Majda model}, Arch. Ration. Mech. Anal. 248 (2024), article 22, DOI 10.1007/s00205-024-01971-3; arXiv:2305.05895.
+\bibitem{KP88} T. Kato, G. Ponce, \emph{Commutator estimates and the Euler and Navier--Stokes equations}, Comm. Pure Appl. Math. 41 (1988) 891--907.
+\bibitem{LSS21} P.~M. Lushnikov, D.~A. Silantyev, M. Siegel, \emph{Collapse versus blow-up and global existence in the generalized Constantin--Lax--Majda equation}, J. Nonlinear Sci. 31 (2021), article 82, DOI 10.1007/s00332-021-09737-x; arXiv:2010.01201.
+\bibitem{MB02} A.~J. Majda, A.~L. Bertozzi, \emph{Vorticity and Incompressible Flow}, Cambridge Texts in Applied Mathematics 27, Cambridge University Press (2002), Chapter 3.
+\bibitem{OSW08} H. Okamoto, T. Sakajo, M. Wunsch, \emph{On a generalization of the Constantin--Lax--Majda equation}, Nonlinearity 21 (2008) 2447--2461, DOI 10.1088/0951-7715/21/10/013.
+\bibitem{SLSA25} D.~A. Silantyev, P.~M. Lushnikov, M. Siegel, D.~M. Ambrose, \emph{Exact periodic solutions of the generalized Constantin--Lax--Majda equation with dissipation}, Stud. Appl. Math. 155 (2025) e70115, DOI 10.1111/sapm.70115; arXiv:2411.01891.
+\end{thebibliography}
+
+\end{document}

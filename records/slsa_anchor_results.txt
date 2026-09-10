@@ -1,0 +1,70 @@
+======== slsa_anchor.py — S04 record ========
+stage field: transcription checks of (41)+(42) real reduction
+  v0=0.50 w2=0.1000 : |mean|=0.00e+00   L2^2 num 1.1170107213 vs formula 1.1170107213  (rel 0.0e+00)
+  v0=0.80 w2=0.0500 : |mean|=0.00e+00   L2^2 num 0.3882297056 vs formula 0.3882297056  (rel 1.4e-16)
+  v0=0.95 w2=0.0463 : |mean|=0.00e+00   L2^2 num 3.1415926536 vs formula 3.1415926536  (rel 1.4e-16)
+stage ode: ODE (57) vs implicit solution (60)
+  v0=0.60 w2=0.0800 : tc(formula)=4.103733  max|F(v(t)) - F(v0) - R0 t| = 3.68e-13
+      at t=0.999 tc: v=0.0500  w2=0.8122  (case-A: v->0+, w2->inf)
+  v0=0.90 w2=0.0853 : tc(formula)=2.760445  max|F(v(t)) - F(v0) - R0 t| = 2.31e-13
+      at t=0.999 tc: v=0.0636  w2=1.9466  (case-A: v->0+, w2->inf)
+stage anchor: our PDE solver vs SLSA exact pole solution (a=1/2, nu=0)
+  v0=0.60 w2=0.0800: tc(formula) = 4.103733
+stage limit: v0->1- boundary limit of the SLSA family
+  v0        w2(0)       tc(v0)      tc-pi        min_shift ||field - cos(x-s)||_inf
+  0.9000   0.085263   2.76044543  -3.81e-01   1.0719e-01
+  0.9900   0.009850   3.10178495  -3.98e-02   1.0068e-02
+  0.9990   0.000999   3.13759458  -4.00e-03   1.0007e-03
+  0.9999   0.000100   3.14119267  -4.00e-04   1.0001e-04
+  (formula limits: w2 -> (1-v0^2)/2, R0 -> -1/4, F -> pi/4, tc -> pi)
+  t=1.0259 (=0.25 tc): |PDE - pole solution|_inf = 1.757e-06
+  t=2.0519 (=0.50 tc): |PDE - pole solution|_inf = 4.063e-06
+  t=3.0778 (=0.75 tc): |PDE - pole solution|_inf = 8.426e-07
+  t=3.6934 (=0.90 tc): |PDE - pole solution|_inf = 1.056e-04
+stage sym: symbolic v->1- limit of the family data
+<path>:44: RuntimeWarning: overflow encountered in multiply
+  ph = np.fft.fft(-a*u*wx + w*ux); ph[~mask] = 0.0
+<path>:44: RuntimeWarning: invalid value encountered in add
+  ph = np.fft.fft(-a*u*wx + w*ux); ph[~mask] = 0.0
+Traceback (most recent call last):
+  File "<path>", line 173, in <module>
+    import sympy as sp
+    
+  File "<path>", line 142, in stage_anchor
+    Tl, Tq = cv.fit_T(tr)
+             ~~~~~~~~^^^^
+  File "<path>", line 187, in fit_T
+    r = np.roots(quad); r = r[np.isreal(r)].real; r = r[r > tt[-1]]
+  File "<path>", line 252, in roots
+    roots = eigvals(A)
+  File "<path>", line 1253, in eigvals
+    _assert_finite(a)
+    ~~~~~~~~~~~~~~^^^
+  File "<path>", line 263, in _assert_finite
+    raise LinAlgError("Array must not contain infs or NaNs")
+numpy.linalg.LinAlgError: Array must not contain infs or NaNs
+stage anchor: our PDE solver vs SLSA exact pole solution (a=1/2, nu=0)
+  v0=0.60 w2=0.0800: tc(formula) = 4.103733
+stage sym: boundary-limit identity (hand-derived; numeric check)
+  1-v0 = 1e-03 : ||field - (-sin x)||_inf = 1.762e-03   (expected O(1-v0))
+  1-v0 = 1e-05 : ||field - (-sin x)||_inf = 1.760e-05   (expected O(1-v0))
+  1-v0 = 1e-07 : ||field - (-sin x)||_inf = 1.760e-07   (expected O(1-v0))
+  t=1.0259 (=0.25 tc): |PDE - pole solution|_inf = 4.730e-14
+  t=2.0519 (=0.50 tc): |PDE - pole solution|_inf = 7.871e-14
+  t=3.0778 (=0.75 tc): |PDE - pole solution|_inf = 2.139e-12
+  t=3.6934 (=0.90 tc): |PDE - pole solution|_inf = 2.115e-12
+<path>:44: RuntimeWarning: overflow encountered in multiply
+  ph = np.fft.fft(-a*u*wx + w*ux); ph[~mask] = 0.0
+<path>:44: RuntimeWarning: invalid value encountered in add
+  ph = np.fft.fft(-a*u*wx + w*ux); ph[~mask] = 0.0
+  ride-to-blowup: stop=blowup at t=4.1025 | T_lin=4.104509 T_quad=4.103809 vs tc=4.103733 (diff 7.8e-04/7.6e-05)
+[118 s]
+stage rate3: sqrt(3) rate � family formula check + cos-x comparison
+  family sup at v=0.050: numeric 521.352 vs (3sqrt3/4)w2/v^2 = 519.615  (rel 3.3e-03)
+  family sup at v=0.020: numeric 3249.33 vs (3sqrt3/4)w2/v^2 = 3247.6  (rel 5.3e-04)
+  family sup at v=0.010: numeric 12992 vs (3sqrt3/4)w2/v^2 = 12990.4  (rel 1.2e-04)
+  cos-x run: fit sup*(pi-t) = C + c1*(pi-t)^beta over (pi-0.3, pi-0.001):
+    C = 1.733840   (sqrt(3) = 1.732051, |C - sqrt3| = 1.8e-03)   c1=0.2441 beta=0.761
+stage cd: shadowing of the -sin x solution by the SLSA family
+  v0=0.990 (tc=3.0707, 1-v0=1e-02):  D(0.25tc)=2.90e-02 [D/(1-v0)=2.90]  D(0.50tc)=6.03e-02 [D/(1-v0)=6.03]  D(0.75tc)=2.18e-01 [D/(1-v0)=21.83]  D(0.90tc)=1.17e+00 [D/(1-v0)=116.91]  D(0.95tc)=3.88e+00 [D/(1-v0)=388.09]
+  v0=0.999 (tc=3.1345, 1-v0=1e-03):  D(0.25tc)=2.88e-03 [D/(1-v0)=2.88]  D(0.50tc)=6.06e-03 [D/(1-v0)=6.06]  D(0.75tc)=2.28e-02 [D/(1-v0)=22.79]  D(0.90tc)=1.36e-01 [D/(1-v0)=135.69]  D(0.95tc)=5.23e-01 [D/(1-v0)=523.48]
